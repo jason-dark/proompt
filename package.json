@@ -1,6 +1,6 @@
 {
   "name": "proompt",
-  "version": "1.0.0",
+  "version": "0.1.0-alpha.1",
   "description": "CLI tool for running AI prompts with structure and repeatability",
   "main": "dist/index.js",
   "bin": {
