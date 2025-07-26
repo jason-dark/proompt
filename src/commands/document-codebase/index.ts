@@ -1,6 +1,6 @@
 import { readFileSync } from "fs";
 import * as path from "path";
-import { createCommandModule } from "../../core/command-utils";
+import { createCommandModule } from "@/core/command-utils";
 import { documentCodebaseArgsSchema } from "./schema";
 
 // Read proompt content

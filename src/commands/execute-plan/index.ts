@@ -1,7 +1,7 @@
 import { readFileSync } from "fs";
 import * as path from "path";
-import { createCommandModule } from "../../core/command-utils";
 import { executePlanArgsSchema } from "./schema";
+import { createCommandModule } from "@/core/command-utils";
 
 // Read proompt content
 const proomptContent = readFileSync(

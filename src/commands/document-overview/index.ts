@@ -1,11 +1,11 @@
 import { readFileSync } from "fs";
 import * as path from "path";
-import { createCommandModule } from "../../core/command-utils";
 import { documentOverviewArgsSchema } from "./schema";
+import { createCommandModule } from "@/core/command-utils";
 
 // Read proompt content
 const proomptContent = readFileSync(
-  path.join(__dirname, "proompt.md"), 
+  path.join(__dirname, "proompt.md"),
   "utf-8"
 );
 
@@ -13,16 +13,18 @@ const proomptContent = readFileSync(
 export const documentOverviewCommand = createCommandModule(
   {
     name: "document-overview",
-    description: "Generate comprehensive codebase analysis and overview documentation",
+    description:
+      "Generate comprehensive codebase analysis and overview documentation",
     arguments: [
       {
         name: "initial-documentation-path",
-        description: "Path to initial documentation file (README.md, CLAUDE.md, GEMINI.md)",
+        description:
+          "Path to initial documentation file (README.md, CLAUDE.md, GEMINI.md)",
         required: true,
         type: "string",
-        alias: "i"
-      }
-    ]
+        alias: "i",
+      },
+    ],
   },
   documentOverviewArgsSchema,
   proomptContent
