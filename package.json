@@ -1,0 +1,40 @@
+{
+  "name": "proompt",
+  "version": "1.0.0",
+  "description": "CLI tool for running AI prompts with structure and repeatability",
+  "main": "dist/index.js",
+  "bin": {
+    "proompt": "./dist/index.js"
+  },
+  "files": [
+    "dist/"
+  ],
+  "scripts": {
+    "build": "tsc && find src/commands -name 'proompt.md' -exec sh -c 'mkdir -p \"dist/commands/$(basename $(dirname {}))\" && cp \"{}\" \"dist/commands/$(basename $(dirname {}))/\"' \\; && chmod +x dist/index.js",
+    "dev": "tsc --watch",
+    "start": "node dist/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "ai",
+    "prompts",
+    "cli",
+    "claude",
+    "llm"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "commander": "^11.0.0",
+    "omelette": "^0.4.17",
+    "zod": "^4.0.10"
+  },
+  "devDependencies": {
+    "@types/node": "^24.1.0",
+    "@types/omelette": "^0.4.5",
+    "typescript": "^5.8.3"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}
