@@ -1,6 +1,7 @@
-import { readdirSync, statSync } from "fs";
-import * as path from "path";
-import { CommandModule } from "../core/types";
+import { readdirSync, statSync } from 'fs';
+import * as path from 'path';
+
+import { CommandModule } from '../core/types';
 
 /**
  * Automatically discover and load all command modules
@@ -14,20 +15,21 @@ export const discoverCommandModules = (): Map<string, CommandModule> => {
     const entries = readdirSync(commandsDir, { withFileTypes: true });
 
     for (const entry of entries) {
-      if (entry.isDirectory() && entry.name !== "node_modules") {
+      if (entry.isDirectory() && entry.name !== 'node_modules') {
         const commandPath = path.join(commandsDir, entry.name);
 
         try {
           // Try to load the command module
-          const indexPath = path.join(commandPath, "index.js");
+          const indexPath = path.join(commandPath, 'index.js');
 
           // Check if index.js exists
           if (statSync(indexPath).isFile()) {
+            // eslint-disable-next-line @typescript-eslint/no-require-imports
             const moduleExports = require(indexPath);
 
             // Look for command export (convention: {commandName}Command)
             const commandKey = Object.keys(moduleExports).find((key) =>
-              key.endsWith("Command")
+              key.endsWith('Command')
             );
 
             if (commandKey) {

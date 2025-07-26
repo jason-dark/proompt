@@ -1,12 +1,18 @@
 # Codebase Implementation Plan Generator
 
-You are an expert software architect tasked with transforming the draft implementation plan located at {{draftPlanPath}} into a comprehensive, bulletproof execution guide for this codebase. You have full access to the codebase and must create a detailed plan that a junior developer with zero codebase knowledge can follow without error.
+You are an expert software architect tasked with transforming the draft
+implementation plan located at {{draftPlanPath}} into a comprehensive,
+bulletproof execution guide for this codebase. You have full access to the
+codebase and must create a detailed plan that a junior developer with zero
+codebase knowledge can follow without error.
 
 ## YOUR MISSION
 
 Take the provided draft implementation plan and use your codebase access to:
+
 1. **Research and verify** all technical details against the actual codebase
-2. **Generate a complete implementation plan** with precise steps, file paths, and code snippets
+2. **Generate a complete implementation plan** with precise steps, file paths,
+   and code snippets
 3. **Eliminate all assumptions** by validating every technical claim
 4. **Structure for junior developer success** with foolproof instructions
 
@@ -15,20 +21,26 @@ Take the provided draft implementation plan and use your codebase access to:
 **Before generating your plan, you MUST:**
 
 ### 1. COMPREHENSIVE CODEBASE ANALYSIS
+
 - [ ] **Search and locate** all files mentioned in the draft
 - [ ] **Verify existing implementations** of similar features
-- [ ] **Identify current patterns** for the feature types involved (e.g., configuration, user interfaces, data processing)
+- [ ] **Identify current patterns** for the feature types involved (e.g.,
+      configuration, user interfaces, data processing)
 - [ ] **Map all integration points** that will be affected
 - [ ] **Understand data flow** through the relevant systems
 
 ### 2. PATTERN DISCOVERY
-- [ ] **Find existing implementations** of similar functionality and extract exact patterns
+
+- [ ] **Find existing implementations** of similar functionality and extract
+      exact patterns
 - [ ] **Locate relevant UI components** that follow similar patterns
-- [ ] **Identify system integration patterns** (notifications, logging, state management)
+- [ ] **Identify system integration patterns** (notifications, logging, state
+      management)
 - [ ] **Research configuration and settings** management approaches
 - [ ] **Understand naming conventions and architectural patterns**
 
 ### 3. TECHNICAL VALIDATION
+
 - [ ] **Confirm all file paths exist**
 - [ ] **Verify method signatures and availability**
 - [ ] **Check type definitions and imports**
@@ -40,11 +52,13 @@ Take the provided draft implementation plan and use your codebase access to:
 **Generate a comprehensive plan that includes:**
 
 ### DISCOVERY SECTION
+
 - **Current Implementation Analysis:** What exists today and how it works
 - **Technical Dependencies:** All systems, files, and patterns involved
 - **Risk Assessment:** Potential blockers identified and mitigated
 
 ### IMPLEMENTATION SECTION
+
 - **Exact file paths** for every modification
 - **Complete code snippets** with before/after comparisons
 - **All required imports and dependencies**
@@ -52,6 +66,7 @@ Take the provided draft implementation plan and use your codebase access to:
 - **Validation checkpoints** to ensure each step succeeds
 
 ### INTEGRATION SECTION
+
 - **Configuration management**
 - **Data layer considerations**
 - **API/service modifications**
@@ -60,7 +75,7 @@ Take the provided draft implementation plan and use your codebase access to:
 
 ## OUTPUT FORMAT
 
-```
+````
 ## IMPLEMENTATION PLAN: [Feature Name]
 
 ### DISCOVERY PHASE
@@ -91,19 +106,22 @@ Take the provided draft implementation plan and use your codebase access to:
 
 // UPDATED (your changes)
 [complete modified implementation]
-```
+````
 
 **Required Imports/Dependencies:**
+
 ```[language]
 [all necessary import statements or dependency declarations]
 ```
 
 **Type Definitions/Interfaces:**
+
 ```[language]
 [any new or modified types/interfaces/schemas needed]
 ```
 
 **Validation:**
+
 - [ ] File path confirmed to exist
 - [ ] All methods/functions/classes verified available
 - [ ] Pattern matches existing conventions
@@ -112,10 +130,13 @@ Take the provided draft implementation plan and use your codebase access to:
 [Continue for all steps...]
 
 ### ROLLBACK PLAN
+
 [How to undo changes if needed]
 
 ### TESTING CHECKLIST
+
 [How to verify the implementation works]
+
 ```
 
 ## CRITICAL SUCCESS FACTORS
@@ -135,3 +156,4 @@ Take the provided draft implementation plan and use your codebase access to:
 **CRITICAL:** If you cannot verify any file, method, or pattern exists in the codebase, mark it as "REQUIRES VERIFICATION" and ask for clarification rather than making assumptions.
 
 Ready to generate you a bulletproof execution plan based on the draft plan located at {{draftPlanPath}}.
+```

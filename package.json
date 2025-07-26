@@ -10,10 +10,14 @@
     "dist/"
   ],
   "scripts": {
-    "build": "tsc && find src/commands -name 'proompt.md' -exec sh -c 'mkdir -p \"dist/commands/$(basename $(dirname {}))\" && cp \"{}\" \"dist/commands/$(basename $(dirname {}))/\"' \\; && chmod +x dist/index.js",
+    "build": "./build.sh",
     "dev": "tsc --watch",
     "start": "node dist/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint src/**/*.ts",
+    "lint:fix": "eslint src/**/*.ts --fix",
+    "format": "prettier --write src/**/*.{ts,js,json,md} || true",
+    "format:check": "prettier --check src/**/*.{ts,json,md}"
   },
   "keywords": [
     "ai",
@@ -33,6 +37,13 @@
   "devDependencies": {
     "@types/node": "^24.1.0",
     "@types/omelette": "^0.4.5",
+    "@typescript-eslint/eslint-plugin": "^8.38.0",
+    "@typescript-eslint/parser": "^8.38.0",
+    "eslint": "^9.32.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.3",
+    "eslint-plugin-simple-import-sort": "^12.1.1",
+    "prettier": "^3.6.2",
     "typescript": "^5.8.3"
   },
   "engines": {
