@@ -67,7 +67,9 @@ const executeProomptContent = async (content: string, args: Record<string, unkno
     outputFiles: outputFileNames.map(name => `\`${name}\``).join(' and '),
     outputFileList: outputFileNames.join(' and '),
     outputAction: isPlural ? 'Create identical' : 'Create a',
-    fileOrFiles: isPlural ? 'files' : 'file'
+    fileOrFiles: isPlural ? 'files' : 'file',
+    requiredDocFiles: outputFileNames.map(name => `"${name}"`).join(', '),
+    allRequiredFilesExist: `all required files (${outputFileNames.join(', ')}) exist`
   };
   
   // Replace variables with provided arguments

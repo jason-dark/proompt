@@ -46,6 +46,36 @@ function discoverModules(codebaseRoot: string): ModuleMap[] {
 
 **Critical**: Each platform-specific implementation (e.g., `libs/node/auth` vs `libs/client/auth`) is a separate module requiring individual analysis.
 
+### Phase 1.5: Directory Skipping Logic (if --skip-existing flag is enabled)
+**Skip Existing Documentation**: The user has set the skip-existing flag to: {{skipExisting}}
+
+When skip-existing is true, apply this directory filtering logic before analyzing each module:
+
+```typescript
+// Directory skip detection logic
+function shouldSkipDirectory(modulePath: string): boolean {
+  const requiredFiles = [{{requiredDocFiles}}];
+  
+  // Check if ALL required documentation files exist in the module directory
+  const allFilesExist = requiredFiles.every(fileName => 
+    fs.existsSync(path.join(modulePath, fileName))
+  );
+  
+  if (allFilesExist) {
+    console.log(`Skipping ${modulePath} - {{allRequiredFilesExist}}`);
+    return true;
+  }
+  
+  // If ANY required file is missing, regenerate ALL required files
+  return false;
+}
+```
+
+**Skip Logic Rules**:
+- If {{skipExisting}} is false: Process all directories regardless of existing files
+- If {{skipExisting}} is true: Only skip a directory if ALL required files ({{requiredDocFiles}}) exist
+- If ANY required file is missing: Regenerate ALL required files to ensure consistency
+
 ### Phase 2: Deep Module Analysis
 For each identified module, perform comprehensive analysis:
 
