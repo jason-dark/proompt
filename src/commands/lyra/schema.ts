@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 // Lyra command typically doesn't take arguments
 export const lyraArgsSchema = z.object({});

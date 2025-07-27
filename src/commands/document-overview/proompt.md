@@ -40,9 +40,9 @@ Execute this reasoning sequence before beginning each section:
 
 **Adapt analysis depth based on complexity:**
 
-- Simple projects (libraries, utilities): 200-300 lines
-- Medium complexity (standard applications): 300-400 lines
-- High complexity (enterprise systems, monorepos): 400-500 lines
+- Simple projects (libraries, utilities): 100-200 lines
+- Medium complexity (standard applications): 200-300 lines
+- High complexity (enterprise systems, monorepos): 300-500 lines
 
 **Initial Documentation Reference:** If initial documentation path is provided
 ({{initialDocumentationPath}}), cross-reference and validate against actual
@@ -51,6 +51,12 @@ implementation, noting any discrepancies or outdated information.
 ## Documentation Structure & Analysis Protocol
 
 ### 1. PROJECT PURPOSE & BUSINESS CONTEXT (50-75 lines)
+
+**Guideline line count to write for this section:**
+
+- Small projects: 10-30 lines
+- Medium projects: 25-50 lines
+- Complex projects: 50-75 lines
 
 **Domain & Value Proposition Analysis:**
 
@@ -74,7 +80,13 @@ implementation, noting any discrepancies or outdated information.
 - **Resource Constraints**: Budget, timeline, team size limitations affecting
   technical decisions
 
-### 2. SYSTEM OVERVIEW & PROJECT ARCHITECTURE (75-100 lines)
+### 2. SYSTEM OVERVIEW & PROJECT ARCHITECTURE
+
+**Guideline line count to write for this section:**
+
+- Small projects: 15-40 lines
+- Medium projects: 30-70 lines
+- Complex projects: 75-100 lines
 
 **Systematic Technical Context Analysis:**
 
@@ -96,7 +108,13 @@ implementation, noting any discrepancies or outdated information.
 - **Development Environment Setup**: Required tooling, configuration, and
   onboarding steps
 
-### 3. CRITICAL DEVELOPMENT PATTERNS & SYSTEM CONTRACTS (125-150 lines)
+### 3. CRITICAL DEVELOPMENT PATTERNS & SYSTEM CONTRACTS
+
+**Guideline line count to write for this section:**
+
+- Small projects: 25-60 lines
+- Medium projects: 50-105 lines
+- Complex projects: 125-150 lines
 
 **Type System & Interface Architecture:**
 
@@ -126,7 +144,13 @@ implementation, noting any discrepancies or outdated information.
   per component type
 - **Security & Authentication**: Shared auth, permission models, data protection
 
-### 4. NAVIGATION MAP & CRITICAL FILES (75-100 lines)
+### 4. NAVIGATION MAP & CRITICAL FILES
+
+**Guideline line count to write for this section:**
+
+- Small projects: 15-40 lines
+- Medium projects: 30-70 lines
+- Complex projects: 75-100 lines
 
 **Project Directory Architecture:** [Provide actual structure with explanations,
 adapting format to detected project type]
@@ -149,7 +173,13 @@ adapting format to detected project type]
 - **Infrastructure Files**: Docker, CI/CD, deployment configurations, build
   scripts
 
-### 5. AI AGENT PITFALLS & CODING GOTCHAS (75-100 lines)
+### 5. AI AGENT PITFALLS & CODING GOTCHAS
+
+**Guideline line count to write for this section:**
+
+- Small projects: 15-40 lines
+- Medium projects: 30-70 lines
+- Complex projects: 75-100 lines
 
 **Code Generation Hazards by Category:**
 
@@ -168,7 +198,13 @@ adapting format to detected project type]
 - **Performance Standards**: Response time expectations, resource usage limits,
   scalability concerns
 
-### 6. TYPICAL WORKFLOWS & INTEGRATION PATTERNS (50-75 lines)
+### 6. TYPICAL WORKFLOWS & INTEGRATION PATTERNS
+
+**Guideline line count to write for this section:**
+
+- Small projects: 10-30 lines
+- Medium projects: 25-50 lines
+- Complex projects: 50-75 lines
 
 **Development Flow Sequences:**
 

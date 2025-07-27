@@ -1,7 +1,7 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export const documentOverviewArgsSchema = z.object({
-  initialDocumentationPath: z.string()
+  initialDocumentationPath: z.string(),
 });
 
 export type DocumentOverviewArgs = z.infer<typeof documentOverviewArgsSchema>;
