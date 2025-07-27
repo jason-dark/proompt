@@ -1,11 +1,15 @@
+import { spawn } from 'child_process';
 import { Command } from 'commander';
 import { z } from 'zod';
 
+import { resolveSettings } from './config/resolver';
+import { OUTPUT_FILE_NAMES } from './constants';
 import {
   CommandArgument,
   CommandHandler,
   CommandHandlerArgs,
   CommandModule,
+  SettingsOverride,
 } from './types';
 
 /**
@@ -62,12 +66,16 @@ const executeProomptContent = async (
   content: string,
   args: Record<string, unknown>
 ): Promise<void> => {
-  const { getLLM, getOutputFormat } = await import('./config/settings');
-  const { OUTPUT_FILE_NAMES } = await import('./constants');
-  const { spawn } = await import('child_process');
+  // Resolve settings using hierarchy: args > user settings > defaults
+  const settingsOverride: SettingsOverride = {
+    llmCli: args?.llmCli as SettingsOverride['llmCli'],
+    outputFormat: args?.outputFormat as SettingsOverride['outputFormat'],
+  };
 
-  const llmCli = getLLM();
-  const outputFormat = getOutputFormat();
+  const resolvedSettings = resolveSettings(settingsOverride);
+
+  const llmCli = resolvedSettings.llmCli;
+  const outputFormat = resolvedSettings.outputFormat;
 
   // Generate output file names based on configured formats
   const outputFileNames = outputFormat.map(
@@ -147,6 +155,16 @@ export const registerCommandModule = (
   const command = program
     .command(module.config.name)
     .description(module.config.description);
+
+  // Add global settings options to all commands (except config)
+  if (module.config.name !== 'config') {
+    command
+      .option('-L, --llm-cli <cli>', 'override LLM CLI (claude|gemini)')
+      .option(
+        '-F, --output-format <formats>',
+        'override output format (claude,gemini or any combination)'
+      );
+  }
 
   // Add options based on command arguments
   for (const arg of module.config.arguments) {

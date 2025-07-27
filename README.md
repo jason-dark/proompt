@@ -109,7 +109,7 @@ exactly what you need and doesn't tie itself in knots with hallucinations.
 npm install -g proompt
 
 # Set your AI coding tool
-proompt --set-llm-cli claude  # or gemini
+proompt config -L claude  # or gemini
 
 # One-time codebase overview documentation (5 minutes)
 proompt document-overview -i "README.md"
@@ -222,12 +222,12 @@ count, not arbitrary limits.
 
 ```bash
 # Choose your AI tool
-proompt --set-llm-cli claude        # Claude Code
-proompt --set-llm-cli gemini        # Gemini CLI
+proompt config -L claude        # Claude Code
+proompt config -L gemini        # Gemini CLI
 
 # Configure output format
-proompt --set-output-format claude,gemini  # Both formats
-proompt --set-output-format claude         # Just CLAUDE.md files
+proompt config -F claude,gemini  # Both CLAUDE.md and GEMINI.md
+proompt config -F claude         # Just CLAUDE.md files
 
 # One-time codebase documentation
 proompt document-overview -i "README.md"
@@ -242,7 +242,7 @@ proompt document-codebase -i "modules" # Custom project structure
 # Core planning cycle
 proompt generate-plan -i "requirements.md"
 proompt validate-plan -i "plan-v1.md"
-proompt implement-plan -i "final-plan.md"
+proompt execute-plan -i "final-plan.md"
 
 # Utilities
 proompt lyra                        # Prompt optimization
@@ -253,8 +253,21 @@ proompt -C /path/to/project <cmd>   # Run from different directory
 ## Configuration
 
 Proompt stores its configuration in a JSON file located at
-`~/.proompt/settings.json`. This file is automatically created when you first
-configure the tool and persists settings across all projects.
+`~/.proompt/settings.json`. This file is created when you first use the
+`proompt config` command and persists settings across all projects. If no
+settings file exists, Proompt uses the built-in defaults: `claude` for the LLM
+CLI and generates `CLAUDE.md` files.
+
+### Settings Hierarchy
+
+Proompt follows a clear hierarchy for configuration:
+
+1. **Command-line arguments** (highest priority) - Override settings for a
+   single command execution
+2. **User settings file** (`~/.proompt/settings.json`) - Your default
+   preferences
+3. **Built-in defaults** (lowest priority) - Fallback when no configuration is
+   set
 
 ### Settings File Location
 
@@ -281,14 +294,33 @@ configure the tool and persists settings across all projects.
 ### Configuration Commands
 
 ```bash
+# View current configuration
+proompt config
+
 # Set your primary AI tool
-proompt --set-llm-cli claude        # Use Claude Code
-proompt --set-llm-cli gemini        # Use Gemini CLI
+proompt config -L claude        # Use Claude Code
+proompt config -L gemini        # Use Gemini CLI
 
 # Configure output formats (creates separate files for each tool)
-proompt --set-output-format claude         # Generate only CLAUDE.md files
-proompt --set-output-format gemini         # Generate only GEMINI.md files
-proompt --set-output-format claude,gemini  # Generate both CLAUDE.md and GEMINI.md files
+proompt config -F claude         # Generate only CLAUDE.md files
+proompt config -F gemini         # Generate only GEMINI.md files
+proompt config -F claude,gemini  # Generate both CLAUDE.md and GEMINI.md files
+```
+
+### Per-Command Overrides
+
+You can override settings for individual command executions without changing
+your defaults:
+
+```bash
+# Use a different LLM for this specific command
+proompt generate-plan -i draft.md -L gemini
+
+# Generate different output format for this command
+proompt validate-plan -i plan.md -F claude,gemini
+
+# Combine multiple overrides
+proompt document-codebase -i src -L claude -F gemini
 ```
 
 ### Default Behavior
@@ -378,7 +410,7 @@ npm install -g proompt
 
 ```bash
 # Configure your AI tool
-proompt --set-llm-cli claude
+proompt config -L claude
 
 # Document your codebase for better context
 proompt document-overview -i "README.md"

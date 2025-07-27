@@ -4,10 +4,13 @@ import {
   commandArgumentSchema,
   commandConfigSchema,
   commandHandlerArgsSchema,
+  configArgsSchema,
   llmCliSchema,
   outputFileNamesSchema,
   outputFormatSchema,
   proomptArgumentsSchema,
+  resolvedSettingsSchema,
+  settingsOverrideSchema,
   settingsSchema,
 } from './schemas';
 
@@ -33,3 +36,10 @@ export type CommandModule = {
   handler: CommandHandler;
   proomptContent: string;
 };
+
+// Settings resolver types
+export type SettingsOverride = z.infer<typeof settingsOverrideSchema>;
+export type ResolvedSettings = z.infer<typeof resolvedSettingsSchema>;
+
+// Config command types
+export type ConfigArgs = z.infer<typeof configArgsSchema>;

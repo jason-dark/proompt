@@ -2,11 +2,14 @@ import { z } from 'zod';
 
 // Re-export existing schemas for backward compatibility
 export const llmCliSchema = z.enum(['claude', 'gemini']);
+
 export const outputFormatSchema = z.array(z.enum(['claude', 'gemini'])).min(1);
+
 export const outputFileNamesSchema = z.object({
   claude: z.literal('CLAUDE.md'),
   gemini: z.literal('GEMINI.md'),
 });
+
 export const settingsSchema = z.object({
   llmCli: llmCliSchema,
   outputFormat: outputFormatSchema.optional(),
@@ -27,10 +30,14 @@ export const commandConfigSchema = z.object({
   arguments: z.array(commandArgumentSchema).default([]),
 });
 
-export const commandHandlerArgsSchema = z.record(
-  z.string(),
-  z.union([z.string(), z.number(), z.boolean()])
-);
+export const commandHandlerArgsSchema = z
+  .record(z.string(), z.union([z.string(), z.number(), z.boolean()]))
+  .and(
+    z.object({
+      llmCli: llmCliSchema.optional(),
+      outputFormat: z.string().optional(),
+    })
+  );
 
 export const commandModuleSchema = z.object({
   config: commandConfigSchema,
@@ -44,3 +51,20 @@ export const proomptArgumentsSchema = z.record(
   z.string(),
   z.union([z.string(), z.number(), z.boolean()])
 );
+
+// Settings resolver schemas
+export const settingsOverrideSchema = z.object({
+  llmCli: llmCliSchema.optional(),
+  outputFormat: z.string().optional(), // Comma-separated string that gets parsed
+});
+
+export const resolvedSettingsSchema = z.object({
+  llmCli: llmCliSchema,
+  outputFormat: outputFormatSchema,
+});
+
+// Config command schema
+export const configArgsSchema = z.object({
+  setLlmCli: llmCliSchema.optional(),
+  setOutputFormat: z.string().optional(),
+});
