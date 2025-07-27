@@ -3,7 +3,7 @@ import * as path from 'path';
 
 import { createCommandModule } from '@/core/command-utils';
 
-import { documentOverviewArgsSchema } from './schema';
+import { documentProjectArgsSchema } from './schema';
 
 // Read proompt content
 const proomptContent = readFileSync(
@@ -12,9 +12,9 @@ const proomptContent = readFileSync(
 );
 
 // Create and export the command module
-export const documentOverviewCommand = createCommandModule(
+export const documentProjectCommand = createCommandModule(
   {
-    name: 'document-overview',
+    name: 'document-project',
     description:
       'Generate comprehensive codebase analysis and overview documentation',
     arguments: [
@@ -28,6 +28,6 @@ export const documentOverviewCommand = createCommandModule(
       },
     ],
   },
-  documentOverviewArgsSchema,
+  documentProjectArgsSchema,
   proomptContent
 );

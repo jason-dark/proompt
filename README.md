@@ -112,9 +112,9 @@ npm install -g proompt
 proompt config -L claude  # or gemini
 
 # One-time codebase overview documentation (5 minutes)
-proompt document-overview -i "README.md"
+proompt document-project -i "README.md"
 # One-time codebase deep documentation (time depends on codebase size)
-proompt document-codebase -i "libs"
+proompt document-deep -i "libs"
 
 # Start your next feature
 echo "Add user authentication to the app ..." > draft.md
@@ -230,10 +230,10 @@ proompt config -F claude,gemini  # Both CLAUDE.md and GEMINI.md
 proompt config -F claude         # Just CLAUDE.md files
 
 # One-time codebase documentation
-proompt document-overview -i "README.md"
-proompt document-codebase -i "src"  # React projects
-proompt document-codebase -i "libs" # Nx monorepos
-proompt document-codebase -i "modules" # Custom project structure
+proompt document-project -i "README.md"
+proompt document-deep -i "src"  # React projects
+proompt document-deep -i "libs" # Nx monorepos
+proompt document-deep -i "modules" # Custom project structure
 ```
 
 ### Development Workflow
@@ -320,7 +320,7 @@ proompt generate-plan -i draft.md -L gemini
 proompt validate-plan -i plan.md -F claude,gemini
 
 # Combine multiple overrides
-proompt document-codebase -i src -L claude -F gemini
+proompt document-deep -i src -L claude -F gemini
 ```
 
 ### Default Behavior
@@ -336,7 +336,7 @@ proompt document-codebase -i src -L claude -F gemini
 
 ```bash
 # Document the entire libs structure
-proompt document-codebase -i "libs"
+proompt document-deep -i "libs"
 
 # Plan a feature that spans multiple packages
 proompt generate-plan -i "cross-service-feature.md"
@@ -346,7 +346,7 @@ proompt generate-plan -i "cross-service-feature.md"
 
 ```bash
 # Document component architecture
-proompt document-codebase -i "src"
+proompt document-deep -i "src"
 
 # Plan component refactoring with state management changes
 proompt generate-plan -i "refactor-user-components.md"
@@ -413,8 +413,8 @@ npm install -g proompt
 proompt config -L claude
 
 # Document your codebase for better context
-proompt document-overview -i "README.md"
-proompt document-codebase -i "src/libs"
+proompt document-project -i "README.md"
+proompt document-deep -i "src/libs"
 ```
 
 ## Contributing

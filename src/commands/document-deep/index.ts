@@ -3,7 +3,7 @@ import * as path from 'path';
 
 import { createCommandModule } from '@/core/command-utils';
 
-import { documentCodebaseArgsSchema } from './schema';
+import { documentDeepArgsSchema } from './schema';
 
 // Read proompt content
 const proomptContent = readFileSync(
@@ -12,9 +12,9 @@ const proomptContent = readFileSync(
 );
 
 // Create and export the command module
-export const documentCodebaseCommand = createCommandModule(
+export const documentDeepCommand = createCommandModule(
   {
-    name: 'document-codebase',
+    name: 'document-deep',
     description:
       'Generate comprehensive module/library documentation for AI coding tools',
     arguments: [
@@ -35,6 +35,6 @@ export const documentCodebaseCommand = createCommandModule(
       },
     ],
   },
-  documentCodebaseArgsSchema,
+  documentDeepArgsSchema,
   proomptContent
 );
