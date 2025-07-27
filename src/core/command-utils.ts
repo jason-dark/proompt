@@ -166,27 +166,56 @@ export const registerCommandModule = (
       );
   }
 
-  // Add options based on command arguments
+  // Add positional arguments and options based on command arguments
   for (const arg of module.config.arguments) {
-    const optionFlag = arg.alias
-      ? `-${arg.alias}, --${arg.name}`
-      : `--${arg.name}`;
-    const optionDescription = arg.required
-      ? `${arg.description} (required)`
-      : arg.description;
-
-    if (arg.type === 'boolean') {
-      command.option(optionFlag, optionDescription);
+    if (arg.positional) {
+      // Handle positional arguments
+      const argName = arg.required ? `<${arg.name}>` : `[${arg.name}]`;
+      command.argument(argName, arg.description);
     } else {
-      const valueDesc = arg.type === 'number' ? '<number>' : '<value>';
-      command.option(`${optionFlag} ${valueDesc}`, optionDescription);
+      // Handle options (flags)
+      const optionFlag = arg.alias
+        ? `-${arg.alias}, --${arg.name}`
+        : `--${arg.name}`;
+      const optionDescription = arg.required
+        ? `${arg.description} (required)`
+        : arg.description;
+
+      if (arg.type === 'boolean') {
+        command.option(optionFlag, optionDescription);
+      } else {
+        const valueDesc = arg.type === 'number' ? '<number>' : '<value>';
+        command.option(`${optionFlag} ${valueDesc}`, optionDescription);
+      }
     }
   }
 
   // Set up action handler
-  command.action(async (options: CommandHandlerArgs) => {
+  command.action(async (...args: unknown[]) => {
     try {
-      await module.handler(options);
+      // Commander.js passes positional arguments first, then options object as the last argument
+      const options = args[args.length - 1] as CommandHandlerArgs;
+      const positionalArgs = args.slice(0, -1);
+
+      // Map positional arguments to their names based on the command configuration
+      const positionalArguments = module.config.arguments.filter(
+        (arg) => arg.positional
+      );
+      const combinedArgs = { ...options };
+
+      for (
+        let i = 0;
+        i < positionalArguments.length && i < positionalArgs.length;
+        i++
+      ) {
+        const argName = positionalArguments[i].name.replace(
+          /-([a-z])/g,
+          (_, letter) => letter.toUpperCase()
+        );
+        combinedArgs[argName] = positionalArgs[i] as string | number | boolean;
+      }
+
+      await module.handler(combinedArgs);
     } catch (error) {
       if (error instanceof z.ZodError) {
         console.error(
@@ -200,10 +229,16 @@ export const registerCommandModule = (
               a.name.replace(/-/g, '').toLowerCase() === argName.toLowerCase()
           );
           if (arg) {
-            const flag = arg.alias
-              ? `-${arg.alias}, --${arg.name}`
-              : `--${arg.name}`;
-            console.error(`  ${flag}: ${arg.description}`);
+            if (arg.positional) {
+              console.error(
+                `  ${arg.name}: ${arg.description} (positional argument)`
+              );
+            } else {
+              const flag = arg.alias
+                ? `-${arg.alias}, --${arg.name}`
+                : `--${arg.name}`;
+              console.error(`  ${flag}: ${arg.description}`);
+            }
           } else {
             console.error(`  --${argName}: ${issue.message}`);
           }

@@ -23,7 +23,7 @@ export const documentDeepCommand = createCommandModule(
         description: 'Path to modules, libs, or packages directory',
         required: true,
         type: 'string',
-        alias: 'i',
+        positional: true,
       },
       {
         name: 'skip-existing',

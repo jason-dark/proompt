@@ -24,7 +24,7 @@ export const documentProjectCommand = createCommandModule(
           'Path to initial documentation file (README.md, CLAUDE.md, GEMINI.md)',
         required: true,
         type: 'string',
-        alias: 'i',
+        positional: true,
       },
     ],
   },

@@ -23,7 +23,7 @@ export const generatePlanCommand = createCommandModule(
         description: 'Path to draft plan file',
         required: true,
         type: 'string',
-        alias: 'i',
+        positional: true,
       },
     ],
   },

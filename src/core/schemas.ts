@@ -22,6 +22,7 @@ export const commandArgumentSchema = z.object({
   required: z.boolean().default(false),
   type: z.enum(['string', 'number', 'boolean']).default('string'),
   alias: z.string().optional(),
+  positional: z.boolean().optional(),
 });
 
 export const commandConfigSchema = z.object({

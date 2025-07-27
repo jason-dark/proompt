@@ -22,7 +22,7 @@ export const executePlanCommand = createCommandModule(
         description: 'Path to implementation plan file',
         required: true,
         type: 'string',
-        alias: 'i',
+        positional: true,
       },
     ],
   },

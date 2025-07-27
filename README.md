@@ -112,13 +112,13 @@ npm install -g proompt
 proompt config -L claude  # or gemini
 
 # One-time codebase overview documentation (5 minutes)
-proompt document-project -i "README.md"
+proompt document-project "README.md"
 # One-time codebase deep documentation (time depends on codebase size)
-proompt document-deep -i "libs"
+proompt document-deep "libs"
 
 # Start your next feature
 echo "Add user authentication to the app ..." > draft.md
-proompt generate-plan -i "draft.md"
+proompt generate-plan "draft.md"
 ```
 
 ## Core Workflow
@@ -127,14 +127,14 @@ proompt generate-plan -i "draft.md"
 
 ```bash
 # Generate a plan from a draft
-proompt generate-plan -i "draft-plan.md"
+proompt generate-plan "draft-plan.md"
 ```
 
 **Draft Plan Sources**: Your draft plan can come from anywhere:
 
 - **Claude Code Plan Mode**: Use Claude Code's plan mode to generate an initial
   plan, save it as `draft-plan.md`, then run
-  `proompt generate-plan -i "draft-plan.md"`
+  `proompt generate-plan "draft-plan.md"`
 - **Manual Requirements**: Write your own requirements in markdown or text
   format
 - **Tickets & Documentation**: Export Jira tickets to XML, copy GitHub issues,
@@ -146,7 +146,7 @@ The key is to describe the desired outcome you are looking for. You don't need
 to have fully fleshed out acceptance criteria (although that doesn't hurt), you
 just need to describe what the end state should be.
 
-**Critical**: Run `proompt generate-plan -i "draft-plan.md"` multiple times,
+**Critical**: Run `proompt generate-plan "draft-plan.md"` multiple times,
 each in a fresh LLM context window. After each run:
 
 - Manually review the output for gaps or issues
@@ -171,7 +171,7 @@ robust plans.
 
 ```bash
 # Validate a plan for completeness
-proompt validate-plan -i "draft-plan-v3.md"
+proompt validate-plan "draft-plan-v3.md"
 ```
 
 **Critical**: Like planning, validation requires multiple iterations in fresh
@@ -196,7 +196,7 @@ alike from going rogue during implementation.**
 ### 3. **Implement** - Execute with confidence
 
 ```bash
-proompt execute-plan -i "battle-tested-plan.md"
+proompt execute-plan "battle-tested-plan.md"
 ```
 
 With thorough planning and validation, your AI coding tool has everything needed
@@ -230,19 +230,19 @@ proompt config -F claude,gemini  # Both CLAUDE.md and GEMINI.md
 proompt config -F claude         # Just CLAUDE.md files
 
 # One-time codebase documentation
-proompt document-project -i "README.md"
-proompt document-deep -i "src"  # React projects
-proompt document-deep -i "libs" # Nx monorepos
-proompt document-deep -i "modules" # Custom project structure
+proompt document-project "README.md"
+proompt document-deep "src"  # React projects
+proompt document-deep "libs" # Nx monorepos
+proompt document-deep "modules" # Custom project structure
 ```
 
 ### Development Workflow
 
 ```bash
 # Core planning cycle
-proompt generate-plan -i "requirements.md"
-proompt validate-plan -i "plan-v1.md"
-proompt execute-plan -i "final-plan.md"
+proompt generate-plan "requirements.md"
+proompt validate-plan "plan-v1.md"
+proompt execute-plan "final-plan.md"
 
 # Utilities
 proompt lyra                        # Prompt optimization
@@ -314,13 +314,13 @@ your defaults:
 
 ```bash
 # Use a different LLM for this specific command
-proompt generate-plan -i draft.md -L gemini
+proompt generate-plan draft.md -L gemini
 
 # Generate different output format for this command
-proompt validate-plan -i plan.md -F claude,gemini
+proompt validate-plan plan.md -F claude,gemini
 
 # Combine multiple overrides
-proompt document-deep -i src -L claude -F gemini
+proompt document-deep src -L claude -F gemini
 ```
 
 ### Default Behavior
@@ -336,20 +336,20 @@ proompt document-deep -i src -L claude -F gemini
 
 ```bash
 # Document the entire libs structure
-proompt document-deep -i "libs"
+proompt document-deep "libs"
 
 # Plan a feature that spans multiple packages
-proompt generate-plan -i "cross-service-feature.md"
+proompt generate-plan "cross-service-feature.md"
 ```
 
 ### React Project
 
 ```bash
 # Document component architecture
-proompt document-deep -i "src"
+proompt document-deep "src"
 
 # Plan component refactoring with state management changes
-proompt generate-plan -i "refactor-user-components.md"
+proompt generate-plan "refactor-user-components.md"
 ```
 
 ### API Integration
@@ -357,7 +357,7 @@ proompt generate-plan -i "refactor-user-components.md"
 ```bash
 # Plan new API endpoints with database changes
 echo "Add webhook system for payment notifications" > webhook-plan.md
-proompt generate-plan -i "webhook-plan.md"
+proompt generate-plan "webhook-plan.md"
 ```
 
 ## Who Benefits
@@ -413,8 +413,8 @@ npm install -g proompt
 proompt config -L claude
 
 # Document your codebase for better context
-proompt document-project -i "README.md"
-proompt document-deep -i "src/libs"
+proompt document-project "README.md"
+proompt document-deep "src/libs"
 ```
 
 ## Contributing
