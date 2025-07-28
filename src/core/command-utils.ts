@@ -156,12 +156,24 @@ export const registerCommandModule = (
     .command(module.config.name)
     .description(module.config.description);
 
+  // TODO: This is gross, need to find a better way to conditionally add options to commands
   // Add global settings options to all commands (except config)
   if (module.config.name !== 'config') {
     // All commands get the LLM CLI option
     command.option('-L, --llm-cli <cli>', 'override LLM CLI (claude|gemini)');
 
-    // Only documentation commands get the output format option
+    // Planning commands get the output file path option (required)
+    if (
+      module.config.name === 'generate-plan' ||
+      module.config.name === 'validate-plan'
+    ) {
+      command.requiredOption(
+        '-o, --output-file-path <path>',
+        'specify output file path for generated content'
+      );
+    }
+
+    // Documentation commands get the output format option
     if (module.config.name.startsWith('document-')) {
       command.option(
         '-F, --output-format <formats>',

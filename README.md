@@ -119,8 +119,8 @@ proompt document-deep "libs"
 proompt document-dir "src/libs/auth"
 
 # Start your next feature
-echo "Add user authentication to the app ..." > draft.md
-proompt generate-plan "draft.md"
+echo "Add user authentication to the app ..." > "draft.md"
+proompt generate-plan "jira-ticket-export.xml" -o "plan-v1.md"
 ```
 
 ## Core Workflow
@@ -128,15 +128,15 @@ proompt generate-plan "draft.md"
 ### 1. **Plan** - Iterate until the specification is bulletproof
 
 ```bash
-# Generate a plan from a draft
-proompt generate-plan "draft-plan.md"
+# Generate a plan from a draft you wrote
+proompt generate-plan "draft-plan.md" -o "plan-v1.md"
 ```
 
 **Draft Plan Sources**: Your draft plan can come from anywhere:
 
 - **Claude Code Plan Mode**: Use Claude Code's plan mode to generate an initial
   plan, save it as `draft-plan.md`, then run
-  `proompt generate-plan "draft-plan.md"`
+  `proompt generate-plan "draft-plan.md" -o "plan-v1.md"`
 - **Manual Requirements**: Write your own requirements in markdown or text
   format
 - **Tickets & Documentation**: Export Jira tickets to XML, copy GitHub issues,
@@ -148,13 +148,13 @@ The key is to describe the desired outcome you are looking for. You don't need
 to have fully fleshed out acceptance criteria (although that doesn't hurt), you
 just need to describe what the end state should be.
 
-**Critical**: Run `proompt generate-plan "draft-plan.md"` multiple times, each
-in a fresh LLM context window. After each run:
+**Critical**: Run `proompt generate-plan "draft-plan.md" -o "plan-version.md"`
+multiple times, each in a fresh LLM context window. After each run:
 
 - Manually review the output for gaps or issues
 - Make corrections to address any problems you spot
 - Save the improved version and run `proompt generate-plan` with that improved
-  version again
+  version again (updating the output file path)
 - Repeat this process until the plan feels solid
 
 Proompt creates implementation plans with:
@@ -173,7 +173,7 @@ robust plans.
 
 ```bash
 # Validate a plan for completeness
-proompt validate-plan "draft-plan-v3.md"
+proompt validate-plan "plan-v3.md" -o "validated-plan-v1.md"
 ```
 
 **Critical**: Like planning, validation requires multiple iterations in fresh
@@ -246,14 +246,18 @@ proompt document-dir "src/libs/auth" -s      # Skip if docs exist
 
 ```bash
 # Core planning cycle
-proompt generate-plan "requirements.md"
-proompt validate-plan "plan-v1.md"
-proompt execute-plan "final-plan.md"
+proompt generate-plan "requirements.md" -o "plan-v1.md"
+# Rerun as many times as needed to make a solid plan
+# ...
+proompt validate-plan "plan-v4.md" -o "validated-plan-v1.md"
+# Rerun as many times as needed to end up with a thoroughly validated plan
+# ...
+proompt execute-plan "validated-plan-v5.md"
 
 # Utilities
 proompt lyra                        # Prompt optimization
 proompt --help                      # All commands
-proompt -C /path/to/project <cmd>   # Run from different directory
+proompt -C "/path/to/project" <cmd>   # Run from different directory
 ```
 
 ## Configuration
@@ -320,13 +324,13 @@ your defaults:
 
 ```bash
 # Use a different LLM for this specific command
-proompt generate-plan draft.md -L gemini
+proompt generate-plan "draft.md" -o "plan.md" -L gemini
 
-# Generate different output format for this command
-proompt validate-plan plan.md -F claude,gemini
+# Generate different output format for this command (documentation commands only)
+proompt document-deep "src" -F claude,gemini
 
 # Combine multiple overrides
-proompt document-deep src -L claude -F gemini
+proompt document-deep "src" -L claude -F gemini
 ```
 
 ### Default Behavior
@@ -345,7 +349,7 @@ proompt document-deep src -L claude -F gemini
 proompt document-deep "libs"
 
 # Plan a feature that spans multiple packages
-proompt generate-plan "cross-service-feature.md"
+proompt generate-plan "cross-service-feature.md" -o "implementation-plan.md"
 ```
 
 ### React Project
@@ -355,15 +359,15 @@ proompt generate-plan "cross-service-feature.md"
 proompt document-deep "src"
 
 # Plan component refactoring with state management changes
-proompt generate-plan "refactor-user-components.md"
+proompt generate-plan "refactor-user-components.md" -o "refactor-plan.md"
 ```
 
 ### API Integration
 
 ```bash
 # Plan new API endpoints with database changes
-echo "Add webhook system for payment notifications" > webhook-plan.md
-proompt generate-plan "webhook-plan.md"
+echo "Add webhook system for payment notifications..." > "webhook-requirements.md"
+proompt generate-plan "webhook-requirements.md" -o "webhook-plan.md"
 ```
 
 ### Directory-Specific Documentation

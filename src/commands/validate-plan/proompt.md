@@ -195,3 +195,6 @@ FAILURE.**
 
 Ready to validate - start reviewing the implementation plan located at
 {{planPath}}.
+
+**Output Instructions:** Save the final validation report to {{outputFilePath}}
+(if there are updates to make, and after gaining approval of the user).

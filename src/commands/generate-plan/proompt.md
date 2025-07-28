@@ -156,4 +156,6 @@ Take the provided draft implementation plan and use your codebase access to:
 **CRITICAL:** If you cannot verify any file, method, or pattern exists in the codebase, mark it as "REQUIRES VERIFICATION" and ask for clarification rather than making assumptions.
 
 Ready to generate you a bulletproof execution plan based on the draft plan located at {{draftPlanPath}}.
+
+**Output Instructions:** Save the implementation plan to {{outputFilePath}}.
 ```

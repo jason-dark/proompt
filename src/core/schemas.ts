@@ -59,9 +59,15 @@ export const settingsOverrideSchema = z.object({
   outputFormat: z.string().optional(), // Comma-separated string that gets parsed
 });
 
-// LLM-only command options (for interactive commands like validate-plan, generate-plan)
+// LLM-only command options (for interactive commands like execute-plan, lyra)
 export const llmCommandOptionsSchema = z.object({
   llmCli: llmCliSchema.optional(),
+});
+
+// Planning command options (for commands that can create output files with custom paths)
+export const planningCommandOptionsSchema = z.object({
+  llmCli: llmCliSchema.optional(),
+  outputFilePath: z.string(),
 });
 
 // Documentation command options (for commands that create output files)
