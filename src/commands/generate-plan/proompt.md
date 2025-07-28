@@ -55,7 +55,8 @@ Take the provided draft implementation plan and use your codebase access to:
 
 - **Project Goals:** Clear statement of what the plan seeks to achieve
 - **Desired End State:** Bulleted list of specific outcomes and functionality
-- **Current State Analysis:** How the current implementation differs from desired state
+- **Current State Analysis:** How the current implementation differs from
+  desired state
 
 ### DISCOVERY SECTION
 
@@ -178,3 +179,4 @@ Take the provided draft implementation plan and use your codebase access to:
 Ready to generate you a bulletproof execution plan based on the draft plan located at {{draftPlanPath}}.
 
 **Output Instructions:** Save the implementation plan to {{outputFilePath}}.
+```
