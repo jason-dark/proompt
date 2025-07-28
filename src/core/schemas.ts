@@ -59,6 +59,12 @@ export const settingsOverrideSchema = z.object({
   outputFormat: z.string().optional(), // Comma-separated string that gets parsed
 });
 
+// Global command options schema (for extending command-specific schemas)
+export const globalCommandOptionsSchema = z.object({
+  llmCli: llmCliSchema.optional(),
+  outputFormat: z.string().optional(),
+});
+
 export const resolvedSettingsSchema = z.object({
   llmCli: llmCliSchema,
   outputFormat: outputFormatSchema,

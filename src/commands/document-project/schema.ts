@@ -1,7 +1,11 @@
 import { z } from 'zod';
 
-export const documentProjectArgsSchema = z.object({
-  initialDocumentationPath: z.string(),
-});
+import { globalCommandOptionsSchema } from '@/core/schemas';
+
+export const documentProjectArgsSchema = z
+  .object({
+    initialDocumentationPath: z.string(),
+  })
+  .and(globalCommandOptionsSchema);
 
 export type DocumentProjectArgs = z.infer<typeof documentProjectArgsSchema>;

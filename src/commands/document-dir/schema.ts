@@ -1,8 +1,12 @@
 import { z } from 'zod';
 
-export const documentDeepArgsSchema = z.object({
-  directoryPath: z.string(),
-  skipExisting: z.boolean().default(false),
-});
+import { globalCommandOptionsSchema } from '@/core/schemas';
 
-export type DocumentDeepArgs = z.infer<typeof documentDeepArgsSchema>;
+export const documentDirArgsSchema = z
+  .object({
+    directoryPath: z.string(),
+    skipExisting: z.boolean().default(false),
+  })
+  .and(globalCommandOptionsSchema);
+
+export type DocumentDirArgs = z.infer<typeof documentDirArgsSchema>;

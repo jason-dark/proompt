@@ -3,7 +3,7 @@ import * as path from 'path';
 
 import { createCommandModule } from '@/core/command-utils';
 
-import { documentDeepArgsSchema } from './schema';
+import { documentDirArgsSchema } from './schema';
 
 // Read proompt content
 const proomptContent = readFileSync(
@@ -35,6 +35,6 @@ export const documentDeepCommand = createCommandModule(
       },
     ],
   },
-  documentDeepArgsSchema,
+  documentDirArgsSchema,
   proomptContent
 );
