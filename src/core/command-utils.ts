@@ -158,12 +158,16 @@ export const registerCommandModule = (
 
   // Add global settings options to all commands (except config)
   if (module.config.name !== 'config') {
-    command
-      .option('-L, --llm-cli <cli>', 'override LLM CLI (claude|gemini)')
-      .option(
+    // All commands get the LLM CLI option
+    command.option('-L, --llm-cli <cli>', 'override LLM CLI (claude|gemini)');
+
+    // Only documentation commands get the output format option
+    if (module.config.name.startsWith('document-')) {
+      command.option(
         '-F, --output-format <formats>',
         'override output format (claude,gemini or any combination)'
       );
+    }
   }
 
   // Add positional arguments and options based on command arguments

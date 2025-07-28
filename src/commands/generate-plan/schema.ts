@@ -1,11 +1,11 @@
 import { z } from 'zod';
 
-import { globalCommandOptionsSchema } from '@/core/schemas';
+import { llmCommandOptionsSchema } from '@/core/schemas';
 
 export const generatePlanArgsSchema = z
   .object({
     draftPlanPath: z.string(),
   })
-  .and(globalCommandOptionsSchema);
+  .and(llmCommandOptionsSchema);
 
 export type GeneratePlanArgs = z.infer<typeof generatePlanArgsSchema>;

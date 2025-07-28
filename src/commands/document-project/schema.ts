@@ -1,11 +1,11 @@
 import { z } from 'zod';
 
-import { globalCommandOptionsSchema } from '@/core/schemas';
+import { documentationCommandOptionsSchema } from '@/core/schemas';
 
 export const documentProjectArgsSchema = z
   .object({
     initialDocumentationPath: z.string(),
   })
-  .and(globalCommandOptionsSchema);
+  .and(documentationCommandOptionsSchema);
 
 export type DocumentProjectArgs = z.infer<typeof documentProjectArgsSchema>;

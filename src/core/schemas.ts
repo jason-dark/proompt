@@ -59,8 +59,13 @@ export const settingsOverrideSchema = z.object({
   outputFormat: z.string().optional(), // Comma-separated string that gets parsed
 });
 
-// Global command options schema (for extending command-specific schemas)
-export const globalCommandOptionsSchema = z.object({
+// LLM-only command options (for interactive commands like validate-plan, generate-plan)
+export const llmCommandOptionsSchema = z.object({
+  llmCli: llmCliSchema.optional(),
+});
+
+// Documentation command options (for commands that create output files)
+export const documentationCommandOptionsSchema = z.object({
   llmCli: llmCliSchema.optional(),
   outputFormat: z.string().optional(),
 });

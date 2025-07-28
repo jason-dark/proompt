@@ -1,8 +1,8 @@
 import { z } from 'zod';
 
-import { globalCommandOptionsSchema } from '@/core/schemas';
+import { llmCommandOptionsSchema } from '@/core/schemas';
 
 // Lyra command typically doesn't take arguments
-export const lyraArgsSchema = z.object({}).and(globalCommandOptionsSchema);
+export const lyraArgsSchema = z.object({}).and(llmCommandOptionsSchema);
 
 export type LyraArgs = z.infer<typeof lyraArgsSchema>;
