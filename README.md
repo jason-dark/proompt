@@ -115,6 +115,8 @@ proompt config -L claude  # or gemini
 proompt document-project "README.md"
 # One-time codebase deep documentation (time depends on codebase size)
 proompt document-deep "libs"
+# Document specific directory/module (faster than full codebase)
+proompt document-dir "src/libs/auth"
 
 # Start your next feature
 echo "Add user authentication to the app ..." > draft.md
@@ -146,8 +148,8 @@ The key is to describe the desired outcome you are looking for. You don't need
 to have fully fleshed out acceptance criteria (although that doesn't hurt), you
 just need to describe what the end state should be.
 
-**Critical**: Run `proompt generate-plan "draft-plan.md"` multiple times,
-each in a fresh LLM context window. After each run:
+**Critical**: Run `proompt generate-plan "draft-plan.md"` multiple times, each
+in a fresh LLM context window. After each run:
 
 - Manually review the output for gaps or issues
 - Make corrections to address any problems you spot
@@ -234,6 +236,10 @@ proompt document-project "README.md"
 proompt document-deep "src"  # React projects
 proompt document-deep "libs" # Nx monorepos
 proompt document-deep "modules" # Custom project structure
+
+# Document specific directories
+proompt document-dir "src/libs/api"    # Single directory
+proompt document-dir "src/libs/auth" -s      # Skip if docs exist
 ```
 
 ### Development Workflow
@@ -360,6 +366,36 @@ echo "Add webhook system for payment notifications" > webhook-plan.md
 proompt generate-plan "webhook-plan.md"
 ```
 
+### Directory-Specific Documentation
+
+Use `document-dir` to create focused documentation for individual directories or
+modules:
+
+```bash
+# Document a specific component directory
+proompt document-dir "src/components/ui"
+
+# Document a service module
+proompt document-dir "src/services/auth"
+
+# Skip directories that already have complete documentation
+proompt document-dir "libs/shared" --skip-existing
+
+# Use short flag for skip-existing
+proompt document-dir "src/utils/helpers" -s
+```
+
+**When to use `document-dir` vs `document-deep`:**
+
+- **`document-dir`**: Fast, focused documentation for a single directory when
+  you need context for specific modules or components
+- **`document-deep`**: Comprehensive documentation of entire codebase sections,
+  slower but more complete
+
+**Skip-existing flag (`-s`):** Only processes directories missing any required
+documentation files (CLAUDE.md, GEMINI.md). If all required documentation files
+exist, the directory is skipped entirely.
+
 ## Who Benefits
 
 **Solo Developers**: Avoid mid-implementation surprises when you realize you
@@ -415,6 +451,7 @@ proompt config -L claude
 # Document your codebase for better context
 proompt document-project "README.md"
 proompt document-deep "src/libs"
+proompt document-dir "apps/scripts"  # Document specific directories
 ```
 
 ## Contributing

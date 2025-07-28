@@ -194,14 +194,30 @@ export const registerCommandModule = (
   command.action(async (...args: unknown[]) => {
     try {
       // Commander.js passes positional arguments first, then options object as the last argument
-      const options = args[args.length - 1] as CommandHandlerArgs;
+      const commandObject = args[args.length - 1] as {
+        _optionValues?: Record<string, unknown>;
+      };
       const positionalArgs = args.slice(0, -1);
+
+      // Extract option values from Commander object
+      const options = commandObject._optionValues || {};
 
       // Map positional arguments to their names based on the command configuration
       const positionalArguments = module.config.arguments.filter(
         (arg) => arg.positional
       );
       const combinedArgs = { ...options };
+
+      // Convert option keys from kebab-case to camelCase to match schema expectations
+      for (const [key, value] of Object.entries(options)) {
+        const camelKey = key.replace(/-([a-z])/g, (_, letter) =>
+          letter.toUpperCase()
+        );
+        if (camelKey !== key) {
+          combinedArgs[camelKey] = value;
+          delete combinedArgs[key];
+        }
+      }
 
       for (
         let i = 0;
@@ -215,7 +231,7 @@ export const registerCommandModule = (
         combinedArgs[argName] = positionalArgs[i] as string | number | boolean;
       }
 
-      await module.handler(combinedArgs);
+      await module.handler(combinedArgs as CommandHandlerArgs);
     } catch (error) {
       if (error instanceof z.ZodError) {
         console.error(
