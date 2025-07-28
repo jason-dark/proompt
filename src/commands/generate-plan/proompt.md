@@ -51,6 +51,12 @@ Take the provided draft implementation plan and use your codebase access to:
 
 **Generate a comprehensive plan that includes:**
 
+### OVERVIEW SECTION
+
+- **Project Goals:** Clear statement of what the plan seeks to achieve
+- **Desired End State:** Bulleted list of specific outcomes and functionality
+- **Current State Analysis:** How the current implementation differs from desired state
+
 ### DISCOVERY SECTION
 
 - **Current Implementation Analysis:** What exists today and how it works
@@ -77,6 +83,20 @@ Take the provided draft implementation plan and use your codebase access to:
 
 ````
 ## IMPLEMENTATION PLAN: [Feature Name]
+
+### OVERVIEW
+**Project Goals:**
+[Clear, concise statement of what this implementation plan seeks to achieve]
+
+**Desired End State:**
+- [Specific outcome 1]
+- [Specific functionality 2]
+- [User experience improvement 3]
+- [Technical capability 4]
+- [Integration result 5]
+
+**Current State vs. Desired State:**
+[Detailed explanation of how the current implementation differs from the desired end state, highlighting gaps and areas for improvement]
 
 ### DISCOVERY PHASE
 **Current Implementation Research:**
@@ -158,4 +178,3 @@ Take the provided draft implementation plan and use your codebase access to:
 Ready to generate you a bulletproof execution plan based on the draft plan located at {{draftPlanPath}}.
 
 **Output Instructions:** Save the implementation plan to {{outputFilePath}}.
-```
