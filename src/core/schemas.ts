@@ -1,6 +1,5 @@
 import { z } from 'zod';
 
-// Re-export existing schemas for backward compatibility
 export const llmCliSchema = z.enum(['claude', 'gemini']);
 
 export const outputFormatSchema = z.array(z.enum(['claude', 'gemini'])).min(1);
@@ -40,13 +39,6 @@ export const commandHandlerArgsSchema = z
     })
   );
 
-export const commandModuleSchema = z.object({
-  config: commandConfigSchema,
-  argsSchema: z.any(), // Schema validation happens at runtime
-  handler: z.function(),
-  proomptContent: z.string(),
-});
-
 // Base schema for proompt arguments (used in execution)
 export const proomptArgumentsSchema = z.record(
   z.string(),
@@ -81,8 +73,25 @@ export const resolvedSettingsSchema = z.object({
   outputFormat: outputFormatSchema,
 });
 
-// Config command schema
-export const configArgsSchema = z.object({
-  setLlmCli: llmCliSchema.optional(),
-  setOutputFormat: z.string().optional(),
+// Settings with metadata schema
+export const settingsWithMetaSchema = z.object({
+  settings: settingsSchema.nullable(),
+  fileExists: z.boolean(),
+  filePath: z.string(),
 });
+
+// Config command schema - requires either global or project scope
+export const configArgsSchema = z
+  .object({
+    global: z.boolean().optional(),
+    project: z.boolean().optional(),
+    setLlmCli: llmCliSchema.optional(),
+    setOutputFormat: z.string().optional(),
+  })
+  .refine(
+    (data) => (data.global && !data.project) || (!data.global && data.project),
+    {
+      message: 'Exactly one of --global or --project must be specified',
+      path: ['global', 'project'],
+    }
+  );

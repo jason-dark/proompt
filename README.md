@@ -108,8 +108,8 @@ exactly what you need and doesn't tie itself in knots with hallucinations.
 # Install globally
 npm install -g proompt
 
-# Set your AI coding tool
-proompt config -L claude  # or gemini
+# Set your AI coding tool globally
+proompt config --global --set-llm-cli claude  # or gemini
 
 # One-time codebase overview documentation (5 minutes)
 proompt document-project "README.md"
@@ -259,10 +259,16 @@ proompt -C "/path/to/project" <cmd>   # Run from different directory
 
 ## Configuration
 
-Proompt stores its configuration in a JSON file located at
-`~/.proompt/settings.json`. This file is created when you first use the
-`proompt config` command and persists settings across all projects. If no
-settings file exists, Proompt uses the built-in defaults: `claude` for the LLM
+Proompt supports both global and project-specific configuration through JSO
+config files:
+
+- **Global settings** (`~/.proompt/settings.json`) - Your default preferences
+  across all projects
+- **Project settings** (`.proompt/settings.json`) - Project-specific overrides
+  in the current directory
+
+These files are created when you first use the `proompt config` command. If no
+settings files exist, Proompt uses the built-in defaults: `claude` for the LLM
 CLI and generates `CLAUDE.md` files.
 
 ### Settings Hierarchy
@@ -271,15 +277,25 @@ Proompt follows a clear hierarchy for configuration:
 
 1. **Command-line arguments** (highest priority) - Override settings for a
    single command execution
-2. **User settings file** (`~/.proompt/settings.json`) - Your default
-   preferences
-3. **Built-in defaults** (lowest priority) - Fallback when no configuration is
+2. **Project settings file** (`.proompt/settings.json` in current directory) -
+   Project-specific preferences that override global settings
+3. **Global settings file** (`~/.proompt/settings.json` in home directory) -
+   Your default preferences across all projects
+4. **Built-in defaults** (lowest priority) - Fallback when no configuration is
    set
 
-### Settings File Location
+### Settings File Locations
+
+**Global Settings (affects all projects):**
 
 ```
 ~/.proompt/settings.json
+```
+
+**Project Settings (affects current project only):**
+
+```
+.proompt/settings.json  # In your project's current working directory
 ```
 
 ### Available Configuration Options
@@ -300,19 +316,38 @@ Proompt follows a clear hierarchy for configuration:
 
 ### Configuration Commands
 
+**Important:** All config commands require either `--global` (`-g`) or
+`--project` (`-p`) to specify which settings you want to manage.
+
 ```bash
 # View current configuration
-proompt config
+proompt config --global          # View global settings
+proompt config --project         # View project settings
 
-# Set your primary AI tool
-proompt config -L claude        # Use Claude Code
-proompt config -L gemini        # Use Gemini CLI
+# Set global preferences (affects all projects)
+proompt config --global --set-llm-cli claude        # Use Claude Code globally
+proompt config --global --set-output-format claude,gemini  # Set global output format
 
-# Configure output formats (creates separate files for each tool)
-proompt config -F claude         # Generate only CLAUDE.md files
-proompt config -F gemini         # Generate only GEMINI.md files
-proompt config -F claude,gemini  # Generate both CLAUDE.md and GEMINI.md files
+# Set project-specific preferences (affects current project only)
+proompt config --project --set-llm-cli gemini       # Use Gemini CLI for this project
+proompt config --project --set-output-format claude # Set project output format
 ```
+
+### When to Use Global vs Project Settings
+
+**Use Global Settings (`--global`) when:**
+
+- Setting your default AI tool preference across all projects
+- Configuring your preferred output format for most work
+- Establishing baseline settings for new projects
+
+**Use Project Settings (`--project`) when:**
+
+- Working on a team project with specific tool requirements
+- A project needs different output formats than your personal preference
+- Overriding global settings for specific repositories
+- Sharing consistent settings with team members (commit `.proompt/settings.json`
+  to git)
 
 ### Per-Command Overrides
 
@@ -410,30 +445,6 @@ solve your actual problem.
 
 **With Proompt**: AI becomes a reliable implementation partner that builds
 exactly what you need.
-
-## Installation & Setup
-
-### Prerequisites
-
-- Node.js 14.0.0 or higher
-- Claude Code or Gemini CLI installed and configured
-
-### Install
-
-```bash
-npm install -g proompt
-```
-
-### Initial Setup (One-Time)
-
-```bash
-# Configure your AI tool
-proompt config -L claude
-
-# Document your codebase for better context
-proompt document-project "README.md"
-proompt document-dirs "apps/scripts/migrate apps/scripts/upload"  # Document specific directories
-```
 
 ## Contributing
 

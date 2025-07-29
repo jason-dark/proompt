@@ -1,8 +1,11 @@
 import { createCommandModule } from '@/core/command-utils';
 import {
-  getSettingsPath,
-  readSettings,
-  writeSettings,
+  getGlobalSettingsPath,
+  getProjectSettingsPath,
+  readGlobalSettings,
+  readProjectSettings,
+  writeGlobalSettings,
+  writeProjectSettings,
 } from '@/core/config/settings';
 import { configArgsSchema } from '@/core/schemas';
 import { CommandHandlerArgs, Settings } from '@/core/types';
@@ -11,19 +14,66 @@ import { CommandHandlerArgs, Settings } from '@/core/types';
 const configHandler = async (args: CommandHandlerArgs): Promise<void> => {
   const validatedArgs = configArgsSchema.parse(args);
 
+  const isGlobal = validatedArgs.global;
+  const isProject = validatedArgs.project;
+
   if (!validatedArgs.setLlmCli && !validatedArgs.setOutputFormat) {
-    // Show current configuration
-    const currentSettings = readSettings();
-    console.log('Current configuration:');
-    console.log(`  LLM CLI: ${currentSettings.llmCli}`);
-    console.log(
-      `  Output format: ${currentSettings.outputFormat ? currentSettings.outputFormat.join(', ') : currentSettings.llmCli}`
-    );
-    console.log(`  Settings file: ${getSettingsPath()}`);
+    // Show current configuration with clear messaging
+    if (isGlobal) {
+      const globalMeta = readGlobalSettings();
+      if (globalMeta.fileExists && globalMeta.settings) {
+        console.log(`Global configuration (from ${globalMeta.filePath}):`);
+        console.log(`  LLM CLI: ${globalMeta.settings.llmCli}`);
+        console.log(
+          `  Output format: ${globalMeta.settings.outputFormat ? globalMeta.settings.outputFormat.join(', ') : globalMeta.settings.llmCli}`
+        );
+      } else {
+        console.log('No global configuration file found.');
+        console.log('Using built-in defaults:');
+        console.log('  LLM CLI: claude (default)');
+        console.log('  Output format: claude (default)');
+        console.log('');
+        console.log(
+          'Create global settings: proompt config --global --set-llm-cli <value>'
+        );
+      }
+    } else if (isProject) {
+      const projectMeta = readProjectSettings();
+      const globalMeta = readGlobalSettings();
+
+      if (projectMeta.fileExists && projectMeta.settings) {
+        console.log(`Project configuration (from ${projectMeta.filePath}):`);
+        console.log(`  LLM CLI: ${projectMeta.settings.llmCli}`);
+        console.log(
+          `  Output format: ${projectMeta.settings.outputFormat ? projectMeta.settings.outputFormat.join(', ') : projectMeta.settings.llmCli}`
+        );
+      } else {
+        console.log('No project configuration file found.');
+        console.log('Effective settings for this project:');
+
+        if (globalMeta.fileExists && globalMeta.settings) {
+          console.log(
+            `  LLM CLI: ${globalMeta.settings.llmCli} (from global settings)`
+          );
+          console.log(
+            `  Output format: ${globalMeta.settings.outputFormat ? globalMeta.settings.outputFormat.join(', ') : globalMeta.settings.llmCli} (from global settings)`
+          );
+        } else {
+          console.log('  LLM CLI: claude (built-in default)');
+          console.log('  Output format: claude (built-in default)');
+        }
+        console.log('');
+        console.log(
+          'Create project settings: proompt config --project --set-llm-cli <value>'
+        );
+      }
+    }
     return;
   }
 
-  const currentSettings = readSettings();
+  // Determine which settings to read/write
+  const currentMeta = isGlobal ? readGlobalSettings() : readProjectSettings();
+  const currentSettings = currentMeta.settings || { llmCli: 'claude' as const };
   const newSettings: Settings = { ...currentSettings };
 
   if (validatedArgs.setLlmCli) {
@@ -42,8 +92,14 @@ const configHandler = async (args: CommandHandlerArgs): Promise<void> => {
     console.log(`✓ Output format set to: ${validatedFormats.join(', ')}`);
   }
 
-  writeSettings(newSettings);
-  console.log(`✓ Settings saved to: ${getSettingsPath()}`);
+  // Write to appropriate settings file
+  if (isGlobal) {
+    writeGlobalSettings(newSettings);
+    console.log(`✓ Global settings saved to: ${getGlobalSettingsPath()}`);
+  } else if (isProject) {
+    writeProjectSettings(newSettings);
+    console.log(`✓ Project settings saved to: ${getProjectSettingsPath()}`);
+  }
 };
 
 // Create and export the command module
@@ -53,16 +109,29 @@ export const configCommand = createCommandModule(
     description: 'Configure proompt settings (view or update)',
     arguments: [
       {
+        name: 'global',
+        description: 'Manage global settings (stored in home directory)',
+        required: false,
+        type: 'boolean',
+        alias: 'g',
+      },
+      {
+        name: 'project',
+        description: 'Manage project settings (stored in current directory)',
+        required: false,
+        type: 'boolean',
+        alias: 'p',
+      },
+      {
         name: 'set-llm-cli',
-        description: 'Set the default LLM CLI (claude|gemini)',
+        description: 'Set the LLM CLI (claude|gemini)',
         required: false,
         type: 'string',
         alias: 'L',
       },
       {
         name: 'set-output-format',
-        description:
-          'Set default output format (claude,gemini or any combination)',
+        description: 'Set output format (claude,gemini or any combination)',
         required: false,
         type: 'string',
         alias: 'F',

@@ -1,13 +1,14 @@
+import { DEFAULT_LLM_CLI } from '../constants';
 import {
   outputFormatSchema,
   resolvedSettingsSchema,
   settingsOverrideSchema,
 } from '../schemas';
 import { ResolvedSettings, SettingsOverride } from '../types';
-import { readSettings } from './settings';
+import { readGlobalSettings, readProjectSettings } from './settings';
 
 /**
- * Resolve settings using the hierarchy: command args > user settings > program defaults
+ * Resolve settings using the hierarchy: command args > project settings > global settings > program defaults
  */
 export const resolveSettings = (
   commandArgs: SettingsOverride
@@ -15,12 +16,29 @@ export const resolveSettings = (
   // Validate command args first
   const validatedArgs = settingsOverrideSchema.parse(commandArgs);
 
-  // Get user settings from file (with fallback to defaults)
-  const userSettings = readSettings();
+  // Get settings with metadata from hierarchy
+  const globalMeta = readGlobalSettings();
+  const projectMeta = readProjectSettings();
 
-  // Start with user settings as base
-  let resolvedLlmCli = userSettings.llmCli;
-  let resolvedOutputFormat = userSettings.outputFormat || [userSettings.llmCli];
+  // Start with program defaults
+  let resolvedLlmCli = DEFAULT_LLM_CLI;
+  let resolvedOutputFormat = [DEFAULT_LLM_CLI];
+
+  // Apply global settings if they exist
+  if (globalMeta.settings) {
+    resolvedLlmCli = globalMeta.settings.llmCli;
+    resolvedOutputFormat = globalMeta.settings.outputFormat || [
+      globalMeta.settings.llmCli,
+    ];
+  }
+
+  // Apply project settings if they exist (override global)
+  if (projectMeta.settings) {
+    resolvedLlmCli = projectMeta.settings.llmCli;
+    resolvedOutputFormat = projectMeta.settings.outputFormat || [
+      projectMeta.settings.llmCli,
+    ];
+  }
 
   // Override with command arguments if provided
   if (validatedArgs.llmCli) {

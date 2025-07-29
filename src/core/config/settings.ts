@@ -1,76 +1,140 @@
-import * as fs from "fs";
-import * as path from "path";
-import * as os from "os";
-import { Settings, LlmCli, OutputFormat } from "../types";
-import { settingsSchema } from "../schemas";
-import { DEFAULT_LLM_CLI } from "../constants";
+import * as fs from 'fs';
+import * as os from 'os';
+import * as path from 'path';
+
+import { settingsSchema } from '../schemas';
+import { Settings, SettingsWithMeta } from '../types';
 
 /**
- * Get the path to the settings file
+ * Get the path to the global settings file
  */
-export const getSettingsPath = (): string => {
-  return path.join(os.homedir(), ".proompt", "settings.json");
+export const getGlobalSettingsPath = (): string => {
+  return path.join(os.homedir(), '.proompt', 'settings.json');
 };
 
 /**
- * Ensure the settings directory exists
+ * Get the path to the project settings file
  */
-export const ensureSettingsDir = (): void => {
-  const settingsDir = path.dirname(getSettingsPath());
+export const getProjectSettingsPath = (): string => {
+  return path.join(process.cwd(), '.proompt', 'settings.json');
+};
+
+/**
+ * Ensure the global settings directory exists
+ */
+export const ensureGlobalSettingsDir = (): void => {
+  const settingsDir = path.dirname(getGlobalSettingsPath());
   if (!fs.existsSync(settingsDir)) {
     fs.mkdirSync(settingsDir, { recursive: true });
   }
 };
 
 /**
- * Read settings from file
+ * Ensure the project settings directory exists
  */
-export const readSettings = (): Settings => {
-  try {
-    const settingsPath = getSettingsPath();
-    if (!fs.existsSync(settingsPath)) {
-      return { llmCli: DEFAULT_LLM_CLI };
-    }
-    const settingsContent = fs.readFileSync(settingsPath, "utf8");
-    const parsedSettings = JSON.parse(settingsContent);
-    const validatedSettings = settingsSchema.parse(parsedSettings);
-    return validatedSettings;
-  } catch (error) {
-    console.warn("Warning: Could not read settings file, using defaults");
-    return { llmCli: DEFAULT_LLM_CLI };
+export const ensureProjectSettingsDir = (): void => {
+  const settingsDir = path.dirname(getProjectSettingsPath());
+  if (!fs.existsSync(settingsDir)) {
+    fs.mkdirSync(settingsDir, { recursive: true });
   }
 };
 
 /**
- * Write settings to file
+ * Read global settings from file with metadata
  */
-export const writeSettings = (settings: Settings): void => {
+export const readGlobalSettings = (): SettingsWithMeta => {
+  const filePath = getGlobalSettingsPath();
+
   try {
-    ensureSettingsDir();
-    const settingsPath = getSettingsPath();
+    if (!fs.existsSync(filePath)) {
+      return {
+        settings: null,
+        fileExists: false,
+        filePath,
+      };
+    }
+
+    const settingsContent = fs.readFileSync(filePath, 'utf8');
+    const parsedSettings = JSON.parse(settingsContent);
+    const validatedSettings = settingsSchema.parse(parsedSettings);
+
+    return {
+      settings: validatedSettings,
+      fileExists: true,
+      filePath,
+    };
+  } catch {
+    console.warn('Warning: Could not read global settings file');
+    return {
+      settings: null,
+      fileExists: false,
+      filePath,
+    };
+  }
+};
+
+/**
+ * Read project settings from file with metadata
+ */
+export const readProjectSettings = (): SettingsWithMeta => {
+  const filePath = getProjectSettingsPath();
+
+  try {
+    if (!fs.existsSync(filePath)) {
+      return {
+        settings: null,
+        fileExists: false,
+        filePath,
+      };
+    }
+
+    const settingsContent = fs.readFileSync(filePath, 'utf8');
+    const parsedSettings = JSON.parse(settingsContent);
+    const validatedSettings = settingsSchema.parse(parsedSettings);
+
+    return {
+      settings: validatedSettings,
+      fileExists: true,
+      filePath,
+    };
+  } catch {
+    console.warn('Warning: Could not read project settings file');
+    return {
+      settings: null,
+      fileExists: false,
+      filePath,
+    };
+  }
+};
+
+/**
+ * Write global settings to file
+ */
+export const writeGlobalSettings = (settings: Settings): void => {
+  try {
+    ensureGlobalSettingsDir();
+    const settingsPath = getGlobalSettingsPath();
     const validatedSettings = settingsSchema.parse(settings);
     fs.writeFileSync(settingsPath, JSON.stringify(validatedSettings, null, 2));
   } catch (error) {
-    throw new Error(`Failed to write settings: ${(error as Error).message}`);
+    throw new Error(
+      `Failed to write global settings: ${(error as Error).message}`
+    );
   }
 };
 
 /**
- * Get the LLM CLI from settings
+ * Write project settings to file
  */
-export const getLLM = (): LlmCli => {
-  const settings = readSettings();
-  return settings.llmCli;
-};
-
-/**
- * Get the output format from settings, defaulting to the current LLM CLI
- */
-export const getOutputFormat = (): OutputFormat => {
-  const settings = readSettings();
-  if (settings.outputFormat) {
-    return settings.outputFormat;
+export const writeProjectSettings = (settings: Settings): void => {
+  try {
+    ensureProjectSettingsDir();
+    const settingsPath = getProjectSettingsPath();
+    const validatedSettings = settingsSchema.parse(settings);
+    fs.writeFileSync(settingsPath, JSON.stringify(validatedSettings, null, 2));
+  } catch (error) {
+    throw new Error(
+      `Failed to write project settings: ${(error as Error).message}`
+    );
   }
-  // Default to current LLM CLI if no outputFormat is specified
-  return [settings.llmCli];
 };
