@@ -87,7 +87,7 @@ Identify and document:
 ### Phase 3: LLM-Optimized Documentation
 
 {{outputAction}} **platform-tailored documentation** {{outputFiles}} in each
-module's root directory.
+module's root directory. {{directoryRules}}
 
 #### Documentation length
 

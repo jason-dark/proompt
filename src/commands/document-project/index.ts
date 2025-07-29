@@ -10,6 +10,7 @@ import { updateProjectDocHash } from '@/core/utils/doc-metadata';
 import { anyDocumentationFilesModified } from '@/core/utils/file-tracker';
 import { getCurrentCommitHash } from '@/core/utils/git';
 import { executeRepomix } from '@/core/utils/repomix';
+import { formatRulesForPrompt, readRulesFile } from '@/core/utils/rules';
 import {
   generateTempXmlPath,
   logTempFileLocation,
@@ -71,7 +72,13 @@ const customDocumentProjectHandler = async (
     );
     const isPlural = outputFileNames.length > 1;
 
-    // Inject template variables including XML file path
+    // Check for optional RULES.md file in project root
+    const projectRules = readRulesFile(process.cwd());
+    const formattedRules = projectRules
+      ? formatRulesForPrompt(projectRules, 'project root')
+      : '';
+
+    // Inject template variables including XML file path and optional rules
     const enhancedArgs = {
       ...validatedArgs,
       repoXmlPath: xmlFilePath,
@@ -81,6 +88,7 @@ const customDocumentProjectHandler = async (
       fileOrFiles: isPlural ? 'files' : 'file',
       requiredDocFiles: outputFileNames.map((name) => `"${name}"`).join(', '),
       allRequiredFilesExist: `all required files (${outputFileNames.join(', ')}) exist`,
+      projectRules: formattedRules,
     };
 
     // Replace variables with provided arguments using imported function

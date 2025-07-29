@@ -11,6 +11,10 @@ import { anyDocumentationFilesModifiedInDirs } from '@/core/utils/file-tracker';
 import { getCurrentCommitHash } from '@/core/utils/git';
 import { executeRepomix } from '@/core/utils/repomix';
 import {
+  formatMultipleRulesForPrompt,
+  readRulesFromDirectories,
+} from '@/core/utils/rules';
+import {
   generateTempXmlPath,
   logTempFileLocation,
 } from '@/core/utils/temp-file';
@@ -108,7 +112,11 @@ const customDocumentDirsHandler = async (
       .map(([dir, xmlPath]) => `- ${dir}: \`${xmlPath}\``)
       .join('\n');
 
-    // Inject template variables including XML mappings
+    // Check for optional RULES.md files in each directory
+    const rulesMap = readRulesFromDirectories(directoryPaths);
+    const formattedRules = formatMultipleRulesForPrompt(rulesMap) || '';
+
+    // Inject template variables including XML mappings and optional rules
     const enhancedArgs = {
       ...validatedArgs,
       directoryXmlMap: directoryXmlMapping,
@@ -119,6 +127,7 @@ const customDocumentDirsHandler = async (
       fileOrFiles: isPlural ? 'files' : 'file',
       requiredDocFiles: outputFileNames.map((name) => `"${name}"`).join(', '),
       allRequiredFilesExist: `all required files (${outputFileNames.join(', ')}) exist`,
+      directoryRules: formattedRules,
     };
 
     // Replace variables with provided arguments using imported function

@@ -248,7 +248,7 @@ type]
    workflows
 
 **Output Requirement**: {{outputAction}} content in {{outputFiles}}
-{{fileOrFiles}} at repository root.
+{{fileOrFiles}} at repository root. {{projectRules}}
 
 ## LLM-Specific Output Variations
 

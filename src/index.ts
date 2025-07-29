@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 
 import 'module-alias/register';
-import { setupCli } from "./cli/setup";
+
+import { setupCli } from './cli/setup';
 
 const program = setupCli();
 
