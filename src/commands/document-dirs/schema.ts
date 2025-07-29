@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 import { documentationCommandOptionsSchema } from '@/core/schemas';
 
-export const documentDeepArgsSchema = z
+export const documentDirsArgsSchema = z
   .object({
     directoryPaths: z
       .string()
@@ -10,4 +10,4 @@ export const documentDeepArgsSchema = z
   })
   .and(documentationCommandOptionsSchema);
 
-export type DocumentDeepArgs = z.infer<typeof documentDeepArgsSchema>;
+export type DocumentDirsArgs = z.infer<typeof documentDirsArgsSchema>;

@@ -1,7 +1,6 @@
-import { readFileSync } from 'fs';
-import { promises as fs } from 'fs';
-import * as path from 'path';
 import { spawn } from 'child_process';
+import { promises as fs, readFileSync } from 'fs';
+import * as path from 'path';
 
 import { createCommandModule, replaceVariables } from '@/core/command-utils';
 import { resolveSettings } from '@/core/config/resolver';
@@ -13,7 +12,7 @@ import {
   logTempFileLocation,
 } from '@/core/utils/temp-file';
 
-import { documentDeepArgsSchema } from './schema';
+import { documentDirsArgsSchema } from './schema';
 
 // Read proompt content
 const proomptContent = readFileSync(
@@ -24,11 +23,11 @@ const proomptContent = readFileSync(
 /**
  * Custom handler that generates XML file before AI execution
  */
-const customDocumentDeepHandler = async (
+const customDocumentDirsHandler = async (
   args: CommandHandlerArgs
 ): Promise<void> => {
   // Validate arguments using schema
-  const validatedArgs = documentDeepArgsSchema.parse(args);
+  const validatedArgs = documentDirsArgsSchema.parse(args);
 
   try {
     // Parse directory paths from CLI input string
@@ -59,17 +58,19 @@ const customDocumentDeepHandler = async (
 
     // Generate XML files for each directory
     const directoryXmlMap: Record<string, string> = {};
-    
+
     console.log('📦 Packing directories with repomix...');
     for (const dirPath of directoryPaths) {
-      const xmlFilePath = generateTempXmlPath(`document-deep-${dirPath.replace(/[^a-zA-Z0-9]/g, '_')}`);
-      
+      const xmlFilePath = generateTempXmlPath(
+        `document-dir-${dirPath.replace(/[^a-zA-Z0-9]/g, '_')}`
+      );
+
       console.log(`📁 Packing ${dirPath}...`);
       await executeRepomix({
         outputPath: xmlFilePath,
         workingDirectory: dirPath,
       });
-      
+
       directoryXmlMap[dirPath] = xmlFilePath;
       logTempFileLocation(xmlFilePath);
     }
@@ -150,11 +151,11 @@ const customDocumentDeepHandler = async (
 };
 
 // Create and export the command module
-export const documentDeepCommand = createCommandModule(
+export const documentDirsCommand = createCommandModule(
   {
-    name: 'document-deep',
+    name: 'document-dirs',
     description:
-      'Generate comprehensive module/library documentation for AI coding tools',
+      'Generate comprehensive documentation for AI coding tools for any directory with specific project logic',
     arguments: [
       {
         name: 'directory-paths',
@@ -166,7 +167,7 @@ export const documentDeepCommand = createCommandModule(
       },
     ],
   },
-  documentDeepArgsSchema,
+  documentDirsArgsSchema,
   proomptContent,
-  customDocumentDeepHandler
+  customDocumentDirsHandler
 );

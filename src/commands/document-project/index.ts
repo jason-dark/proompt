@@ -117,7 +117,7 @@ export const documentProjectCommand = createCommandModule(
   {
     name: 'document-project',
     description:
-      'Generate comprehensive codebase analysis and overview documentation',
+      'Generate comprehensive codebase analysis and overview documentation for AI coding tools',
     arguments: [
       {
         name: 'initial-documentation-path',

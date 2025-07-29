@@ -114,9 +114,7 @@ proompt config -L claude  # or gemini
 # One-time codebase overview documentation (5 minutes)
 proompt document-project "README.md"
 # Document libs/modules/packages/apps or any dirs with specific project logic (time depends on codebase size)
-proompt document-deep "libs/client/auth libs/server/auth"
-# Document specific directory/module (faster than full codebase)
-proompt document-dir "src/libs/auth"
+proompt document-dirs "libs/client/auth libs/server/auth"
 
 # Start your next feature
 echo "Add user authentication to the app ..." > "draft.md"
@@ -231,15 +229,14 @@ proompt config -L gemini        # Gemini CLI
 proompt config -F claude,gemini  # Both CLAUDE.md and GEMINI.md
 proompt config -F claude         # Just CLAUDE.md files
 
-# One-time codebase documentation
-proompt document-project "README.md"
-proompt document-deep "src/components/AppLayout src/components/Providers"  # React projects
-proompt document-deep "libs/parser libs/decoder libs/encoder" # Nx monorepos
-proompt document-deep "modules/typegen services/api" # Custom project structure
+# Generate codebase overview documentation (will be saved to CLAUDE.md and/or GEMINI.md depending on your config)
+proompt document-project "README.md" # Or pass in any file containing information about your project's purpose
 
-# Document specific directories
-proompt document-dir "src/libs/api"    # Single directory
-proompt document-dir "src/libs/auth" -s      # Skip if docs exist
+# Document specific directories that would benefit from specific documentation
+proompt document-dirs "src/components/AppLayout src/components/Providers ..."  # React projects
+proompt document-dirs "libs/parser libs/decoder libs/encoder ..." # Nx monorepos
+proompt document-dirs "modules/typegen services/api ..." # Custom project structure
+proompt document-dirs "src/scripts/migration" # Single directory
 ```
 
 ### Development Workflow
@@ -255,7 +252,7 @@ proompt validate-plan "plan-v4.md" -o "validated-plan-v1.md"
 proompt execute-plan "validated-plan-v5.md"
 
 # Utilities
-proompt lyra                        # Prompt optimization
+proompt lyra                        # Prompt optimization utility
 proompt --help                      # All commands
 proompt -C "/path/to/project" <cmd>   # Run from different directory
 ```
@@ -327,10 +324,7 @@ your defaults:
 proompt generate-plan "draft.md" -o "plan.md" -L gemini
 
 # Generate different output format for this command (documentation commands only)
-proompt document-deep "src" -F claude,gemini
-
-# Combine multiple overrides
-proompt document-deep "src" -L claude -F gemini
+proompt document-irs "src/utils/decoder src/utils/encoder" -F claude,gemini
 ```
 
 ### Default Behavior
@@ -346,7 +340,7 @@ proompt document-deep "src" -L claude -F gemini
 
 ```bash
 # Document the entire libs structure
-proompt document-deep "libs packages"
+proompt document-dirs "libs/library_1 libs/library_2 libs/library_3 ..."
 
 # Plan a feature that spans multiple packages
 proompt generate-plan "cross-service-feature.md" -o "implementation-plan.md"
@@ -356,7 +350,7 @@ proompt generate-plan "cross-service-feature.md" -o "implementation-plan.md"
 
 ```bash
 # Document component architecture
-proompt document-deep "src components"
+proompt document-dirs "src/components/Layout src/providers/AuthProvider src/api/queries ..."
 
 # Plan component refactoring with state management changes
 proompt generate-plan "refactor-user-components.md" -o "refactor-plan.md"
@@ -372,33 +366,17 @@ proompt generate-plan "webhook-requirements.md" -o "webhook-plan.md"
 
 ### Directory-Specific Documentation
 
-Use `document-dir` to create focused documentation for individual directories or
-modules:
+Use `document-dirs` to create focused documentation for individual directories
+containing code for libs, modules, packages, apps, or any directory in your
+codebase that would benefit from specific CLAUDE.md/GEMINI.md documentation:
 
 ```bash
-# Document a specific component directory
-proompt document-dir "src/components/ui"
+# Document a specific directory
+proompt document-dirs "src/components/ui/AppProviders"
 
-# Document a service module
-proompt document-dir "src/services/auth"
-
-# Skip directories that already have complete documentation
-proompt document-dir "libs/shared" --skip-existing
-
-# Use short flag for skip-existing
-proompt document-dir "src/utils/helpers" -s
+# Document specific directories in your code base
+proompt document-dirs "src/services/auth src/utils/helpers"
 ```
-
-**When to use `document-dir` vs `document-deep`:**
-
-- **`document-dir`**: Fast, focused documentation for a single directory when
-  you need context for specific modules or components
-- **`document-deep`**: Comprehensive documentation of entire codebase sections,
-  slower but more complete
-
-**Skip-existing flag (`-s`):** Only processes directories missing any required
-documentation files (CLAUDE.md, GEMINI.md). If all required documentation files
-exist, the directory is skipped entirely.
 
 ## Who Benefits
 
@@ -454,8 +432,7 @@ proompt config -L claude
 
 # Document your codebase for better context
 proompt document-project "README.md"
-proompt document-deep "src/libs apps/shared"
-proompt document-dir "apps/scripts"  # Document specific directories
+proompt document-dirs "apps/scripts/migrate apps/scripts/upload"  # Document specific directories
 ```
 
 ## Contributing
