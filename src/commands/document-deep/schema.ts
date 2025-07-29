@@ -4,8 +4,9 @@ import { documentationCommandOptionsSchema } from '@/core/schemas';
 
 export const documentDeepArgsSchema = z
   .object({
-    startPath: z.string(),
-    skipExisting: z.boolean().default(false),
+    directoryPaths: z
+      .string()
+      .min(1, 'At least one directory path is required'),
   })
   .and(documentationCommandOptionsSchema);
 

@@ -131,7 +131,7 @@ const executeProomptContent = async (
 /**
  * Replace template variables in content with provided arguments
  */
-const replaceVariables = (
+export const replaceVariables = (
   content: string,
   args: Record<string, unknown>
 ): string => {

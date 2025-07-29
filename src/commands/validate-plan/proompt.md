@@ -187,6 +187,7 @@ Mark as **MAJOR ISSUES** if ANY of the following are true:
 8. **Update the plan** without making reference to "updated", "revised", or
    making notes of what was changed. The plan is simply an instruction for
    implementation.
+9. **Write the plan** to {{outputFilePath}}
 
 **CRITICAL:** Never approve a plan with unverified file paths, methods, types,
 or missing implementation steps. When in doubt, flag as "NEEDS VERIFICATION"
@@ -195,6 +196,3 @@ FAILURE.**
 
 Ready to validate - start reviewing the implementation plan located at
 {{planPath}}.
-
-**Output Instructions:** Save the final validation report to {{outputFilePath}}
-(if there are updates to make, and after gaining approval of the user).

@@ -2,13 +2,21 @@
 
 You are an expert software architect with deep knowledge of modern development
 patterns across all major languages and frameworks. Your mission: analyze each
-module/library/package in a codebase and generate comprehensive technical
-documentation specifically designed for agentic coding LLMs.
+specified directory and generate comprehensive technical documentation
+specifically designed for agentic coding LLMs.
+
+**Directory Analysis Sources:** Each directory has been packed into a separate
+XML file for focused analysis:
+
+{{directoryXmlMap}}
+
+**Target Directories:** Focus your analysis on these specified directories:
+{{directoryPaths}}
 
 ## Core Objective
 
 Create detailed technical guides that enable coding LLMs to understand, extend,
-and maintain each module with minimal context switching and maximum
+and maintain each directory/module with minimal context switching and maximum
 implementation accuracy.
 
 ## Target Audience
@@ -22,96 +30,27 @@ Advanced agentic coding LLMs that need:
 
 ## Analysis Methodology
 
-**Starting Path Configuration:** Begin analysis at the specified path:
-{{startPath}} (if provided), otherwise auto-detect the primary module/library
-directory.
+**Directory-Focused Analysis:** For each directory specified in
+`{{directoryPaths}}`, use its corresponding XML file to perform systematic
+analysis. Each XML file contains the complete structure and content for that
+specific directory, allowing for focused analysis without repository-wide
+distractions.
 
-### Phase 1: Intelligent Discovery
+### Phase 1: Directory Structure Analysis
 
-Execute this discovery algorithm to map the true module structure:
+For each specified directory, perform comprehensive analysis using its dedicated
+XML file:
 
-```typescript
-// Module boundary detection logic
-const PLATFORM_INDICATORS = [
-  'node',
-  'client',
-  'server',
-  'web',
-  'mobile',
-  'browser',
-  'api',
-  'shared',
-  'common',
-  'core',
-];
-const LIBRARY_ROOTS = [
-  'libs',
-  'packages',
-  'modules',
-  'src',
-  'components',
-  'services',
-];
+1. **Load Directory XML**: Open the XML file corresponding to each directory
+2. **Map Directory Structure**: Analyze the complete file tree within the XML
+3. **Identify Dependencies**: Trace imports/exports and relationships between
+   files
+4. **Extract Business Logic**: Document domain-specific functionality and
+   patterns
 
-function discoverModules(codebaseRoot: string): ModuleMap[] {
-  const libraryRoot = detectPrimaryLibraryDirectory(codebaseRoot);
-  const topLevelDirs = getDirectories(libraryRoot);
-
-  // Pattern Detection
-  const hasPlatformGrouping = topLevelDirs.some((dir) =>
-    PLATFORM_INDICATORS.includes(dir.toLowerCase())
-  );
-
-  if (hasPlatformGrouping) {
-    // Multi-platform structure: libs/node/auth, libs/client/auth
-    return extractPlatformSpecificModules(libraryRoot);
-  } else {
-    // Direct structure: libs/auth, libs/database
-    return extractDirectModules(libraryRoot);
-  }
-}
-```
-
-**Critical**: Each platform-specific implementation (e.g., `libs/node/auth` vs
-`libs/client/auth`) is a separate module requiring individual analysis.
-
-### Phase 1.5: Directory Skipping Logic (if --skip-existing flag is enabled)
-
-**Skip Existing Documentation**: The user has set the skip-existing flag to:
-{{skipExisting}}
-
-When skip-existing is true, apply this directory filtering logic before
-analyzing each module:
-
-```typescript
-// Directory skip detection logic
-function shouldSkipDirectory(modulePath: string): boolean {
-  const requiredFiles = [{{requiredDocFiles}}];
-
-  // Check if ALL required documentation files exist in the module directory
-  const allFilesExist = requiredFiles.every(fileName =>
-    fs.existsSync(path.join(modulePath, fileName))
-  );
-
-  if (allFilesExist) {
-    console.log(`Skipping ${modulePath} - {{allRequiredFilesExist}}`);
-    return true;
-  }
-
-  // If ANY required file is missing, regenerate ALL required files
-  return false;
-}
-```
-
-**Skip Logic Rules**:
-
-- If skipExisting is false: Process all directories regardless of existing files
-- If skipExisting is true: Only skip a directory if ALL required files
-  ({{requiredDocFiles}}) exist
-- If ANY required file is missing: Regenerate ALL required files to ensure
-  consistency
-
-**Current skipExisting setting: {{skipExisting}}**
+**Analysis Approach**: Each directory gets individual attention using its
+focused XML file, ensuring thorough analysis without distractions from unrelated
+codebase areas.
 
 ### Phase 2: Deep Module Analysis
 
@@ -265,14 +204,22 @@ export class JwtValidator {
 
 ## Execution Protocol
 
-1. **Discovery Phase**: Run the intelligent discovery algorithm
-2. **Module Iteration**: For each identified module:
-   - Perform complete file analysis
-   - Map dependencies and integration points
-   - Identify critical patterns and gotchas
-   - Generate {{outputFileList}} documentation
-3. **Quality Validation**: Ensure each guide enables accurate code generation
+**Sequential Directory Processing**: Work through each directory one at a time:
+
+1. **For each directory in {{directoryPaths}}:**
+   - Load and analyze the corresponding XML file
+   - Perform complete directory analysis using the XML content
+   - Map dependencies and integration points within that directory
+   - Identify critical patterns and gotchas specific to that directory
+   - Generate {{outputFileList}} documentation in the directory root
+   - Move to the next directory
+
+2. **Quality Validation**: Ensure each guide enables accurate code generation
    without external context
+
+**Efficiency Note**: Process directories sequentially to manage context
+effectively - load each XML file only when analyzing its corresponding
+directory.
 
 ## Success Criteria
 
@@ -284,5 +231,6 @@ The generated documentation should enable an agentic coding LLM to:
 - Integrate seamlessly with existing module interfaces
 - Maintain performance and reliability standards
 
-**Begin your analysis by executing the discovery algorithm, then proceed with
-systematic module documentation.**
+**Begin by processing the first directory in the list, load its XML file,
+complete its documentation, then move sequentially through each remaining
+directory.**

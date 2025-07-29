@@ -5,17 +5,25 @@ Your objective: conduct a systematic technical analysis (up to 500 lines) that
 enables AI coding agents to understand and work effectively with any codebase
 structure - from monorepos to microservices, monoliths to distributed systems.
 
+**Repository Analysis Source:** This analysis is based on a packed repository
+XML file located at `{{repoXmlPath}}`. This XML file contains the complete
+codebase structure and content, generated using repomix for comprehensive
+analysis.
+
 ## Pre-Analysis System Thinking
 
 Execute this reasoning sequence before beginning each section:
 
 **Context Validation Protocol:**
 
-1. Cross-reference provided documentation with actual implementation
-2. Identify discrepancies between documented intent and code reality
-3. Prioritize information by AI agent decision-making impact and code
+1. Analyze the packed repository XML file to understand the complete codebase
+   structure
+2. Cross-reference provided documentation with actual implementation found in
+   the XML
+3. Identify discrepancies between documented intent and code reality
+4. Prioritize information by AI agent decision-making impact and code
    modification frequency
-4. Consider project-specific complexity factors (dependencies, service
+5. Consider project-specific complexity factors (dependencies, service
    interactions, deployment patterns)
 
 **Information Density Optimization:**
@@ -152,8 +160,9 @@ implementation, noting any discrepancies or outdated information.
 - Medium projects: 30-70 lines
 - Complex projects: 75-100 lines
 
-**Project Directory Architecture:** [Provide actual structure with explanations,
-adapting format to detected project type]
+**Project Directory Architecture:** [Based on XML structure analysis, provide
+actual codebase structure with explanations, adapting format to detected project
+type]
 
 **Examples by Project Type:**
 

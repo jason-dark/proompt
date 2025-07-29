@@ -1,4 +1,6 @@
 import { Command } from 'commander';
+import { readFileSync } from 'fs';
+import { join } from 'path';
 
 import { getCommandModules } from '@/commands';
 import { setupCompletion } from '@/completion/shell';
@@ -65,6 +67,19 @@ export const handleMainOptions = (
 };
 
 /**
+ * Get version from package.json
+ */
+const getVersion = (): string => {
+  try {
+    const packageJsonPath = join(__dirname, '../../package.json');
+    const packageJson = JSON.parse(readFileSync(packageJsonPath, 'utf8'));
+    return packageJson.version;
+  } catch {
+    return '0.0.0';
+  }
+};
+
+/**
  * Set up the main CLI program with all options and commands
  */
 export const setupCli = (): Command => {
@@ -76,7 +91,7 @@ export const setupCli = (): Command => {
     .description(
       'CLI tool for running AI prompts with structure and repeatability'
     )
-    .version('1.0.0');
+    .version(getVersion(), '-v, --version', 'display version number');
 
   program
     .option('--completion', 'output completion script for shell')

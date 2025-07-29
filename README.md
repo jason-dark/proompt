@@ -113,8 +113,8 @@ proompt config -L claude  # or gemini
 
 # One-time codebase overview documentation (5 minutes)
 proompt document-project "README.md"
-# One-time codebase deep documentation (time depends on codebase size)
-proompt document-deep "libs"
+# Document libs/modules/packages/apps or any dirs with specific project logic (time depends on codebase size)
+proompt document-deep "libs/client/auth libs/server/auth"
 # Document specific directory/module (faster than full codebase)
 proompt document-dir "src/libs/auth"
 
@@ -233,9 +233,9 @@ proompt config -F claude         # Just CLAUDE.md files
 
 # One-time codebase documentation
 proompt document-project "README.md"
-proompt document-deep "src"  # React projects
-proompt document-deep "libs" # Nx monorepos
-proompt document-deep "modules" # Custom project structure
+proompt document-deep "src/components/AppLayout src/components/Providers"  # React projects
+proompt document-deep "libs/parser libs/decoder libs/encoder" # Nx monorepos
+proompt document-deep "modules/typegen services/api" # Custom project structure
 
 # Document specific directories
 proompt document-dir "src/libs/api"    # Single directory
@@ -346,7 +346,7 @@ proompt document-deep "src" -L claude -F gemini
 
 ```bash
 # Document the entire libs structure
-proompt document-deep "libs"
+proompt document-deep "libs packages"
 
 # Plan a feature that spans multiple packages
 proompt generate-plan "cross-service-feature.md" -o "implementation-plan.md"
@@ -356,7 +356,7 @@ proompt generate-plan "cross-service-feature.md" -o "implementation-plan.md"
 
 ```bash
 # Document component architecture
-proompt document-deep "src"
+proompt document-deep "src components"
 
 # Plan component refactoring with state management changes
 proompt generate-plan "refactor-user-components.md" -o "refactor-plan.md"
@@ -454,7 +454,7 @@ proompt config -L claude
 
 # Document your codebase for better context
 proompt document-project "README.md"
-proompt document-deep "src/libs"
+proompt document-deep "src/libs apps/shared"
 proompt document-dir "apps/scripts"  # Document specific directories
 ```
 

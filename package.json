@@ -1,6 +1,6 @@
 {
   "name": "@jasondark/proompt",
-  "version": "0.1.0-alpha.5",
+  "version": "0.1.0-alpha.6",
   "description": "CLI tool for running AI prompts with structure and repeatability",
   "main": "dist/index.js",
   "bin": {
@@ -45,6 +45,7 @@
     "commander": "^11.0.0",
     "module-alias": "^2.2.3",
     "omelette": "^0.4.17",
+    "repomix": "^1.2.1",
     "zod": "^4.0.10"
   },
   "devDependencies": {

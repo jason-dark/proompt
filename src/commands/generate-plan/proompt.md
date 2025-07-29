@@ -46,6 +46,8 @@ Take the provided draft implementation plan and use your codebase access to:
 - [ ] **Check type definitions and imports**
 - [ ] **Validate data layer operation patterns**
 - [ ] **Ensure API/service interface structures align**
+- [ ] **Ensure any external libraries work in the necessary way by finding and
+      reading their documentation**
 
 ## PLAN GENERATION REQUIREMENTS
 
