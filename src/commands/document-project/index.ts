@@ -6,6 +6,9 @@ import { createCommandModule, replaceVariables } from '@/core/command-utils';
 import { resolveSettings } from '@/core/config/resolver';
 import { OUTPUT_FILE_NAMES } from '@/core/constants';
 import { CommandHandlerArgs } from '@/core/types';
+import { updateProjectDocHash } from '@/core/utils/doc-metadata';
+import { anyDocumentationFilesModified } from '@/core/utils/file-tracker';
+import { getCurrentCommitHash } from '@/core/utils/git';
 import { executeRepomix } from '@/core/utils/repomix';
 import {
   generateTempXmlPath,
@@ -30,6 +33,14 @@ const customDocumentProjectHandler = async (
   const validatedArgs = documentProjectArgsSchema.parse(args);
 
   try {
+    // Get current commit hash for tracking
+    const commitHash = getCurrentCommitHash();
+    if (!commitHash) {
+      console.warn(
+        '⚠️  Warning: Not in a git repository, commit hash tracking disabled'
+      );
+    }
+
     // Generate temporary XML file path
     const xmlFilePath = generateTempXmlPath('document-project');
 
@@ -75,6 +86,9 @@ const customDocumentProjectHandler = async (
     // Replace variables with provided arguments using imported function
     const processedContent = replaceVariables(proomptContent, enhancedArgs);
 
+    // Record start time for file modification tracking
+    const startTime = new Date();
+
     // Launch interactive CLI with initial prompt
     console.log(`🤖 Launching ${llmCli} for repository analysis...`);
     let child;
@@ -93,6 +107,31 @@ const customDocumentProjectHandler = async (
     return new Promise((resolve, reject) => {
       child.on('close', (code) => {
         if (code === 0) {
+          // Check if documentation files were actually modified
+          const filesModified = anyDocumentationFilesModified(
+            startTime,
+            outputFileNames
+          );
+
+          // Update metadata if files were modified and we have a commit hash
+          if (filesModified && commitHash) {
+            try {
+              updateProjectDocHash(commitHash);
+              console.log(
+                `📝 Updated project documentation metadata with commit ${commitHash.substring(0, 7)}`
+              );
+            } catch (error) {
+              console.warn(
+                '⚠️  Warning: Failed to update documentation metadata:',
+                (error as Error).message
+              );
+            }
+          } else if (filesModified && !commitHash) {
+            console.log(
+              '📝 Documentation files were modified but no commit hash available for tracking'
+            );
+          }
+
           resolve();
         } else {
           reject(new Error(`${llmCli} command failed with exit code ${code}`));

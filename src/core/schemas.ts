@@ -80,6 +80,17 @@ export const settingsWithMetaSchema = z.object({
   filePath: z.string(),
 });
 
+// Documentation metadata schemas
+export const docMetadataEntrySchema = z.object({
+  commitHash: z.string(),
+  timestamp: z.string(),
+});
+
+export const docMetadataSchema = z.object({
+  project: docMetadataEntrySchema.optional(),
+  directories: z.record(z.string(), docMetadataEntrySchema).optional(),
+});
+
 // Config command schema - requires either global or project scope
 export const configArgsSchema = z
   .object({

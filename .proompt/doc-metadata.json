@@ -1,0 +1,12 @@
+{
+  "directories": {
+    "src/cli": {
+      "commitHash": "af9643154d1d96aeb99d86f028a65d95d1423f68",
+      "timestamp": "2025-07-29T08:36:30.588Z"
+    },
+    "src/commands": {
+      "commitHash": "af9643154d1d96aeb99d86f028a65d95d1423f68",
+      "timestamp": "2025-07-29T08:36:30.590Z"
+    }
+  }
+}

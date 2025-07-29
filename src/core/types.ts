@@ -4,6 +4,8 @@ import {
   commandArgumentSchema,
   commandConfigSchema,
   commandHandlerArgsSchema,
+  docMetadataEntrySchema,
+  docMetadataSchema,
   llmCliSchema,
   outputFileNamesSchema,
   proomptArgumentsSchema,
@@ -37,3 +39,7 @@ export type CommandModule = {
 export type SettingsOverride = z.infer<typeof settingsOverrideSchema>;
 export type ResolvedSettings = z.infer<typeof resolvedSettingsSchema>;
 export type SettingsWithMeta = z.infer<typeof settingsWithMetaSchema>;
+
+// Documentation metadata types
+export type DocMetadataEntry = z.infer<typeof docMetadataEntrySchema>;
+export type DocMetadata = z.infer<typeof docMetadataSchema>;

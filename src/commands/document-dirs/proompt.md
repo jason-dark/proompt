@@ -91,20 +91,21 @@ module's root directory.
 
 #### Documentation length
 
-- The maximum number of lines you may write per output file is **500**.
-- The minimum number of lines you may write per output file is **100**.
+- The maximum number of characters you may write per output file is **30000**.
+- The minimum number of characters you may write per output file is **1000**.
 
-The size and complexity of the directory will determine how many lines you need.
-You should aim for maximum information density and not purposely seek to inflate
-the line count, but you should use the maximum line count of 500 if you need to.
+The size and complexity of the XML representation of a given directory will
+determine how many characters you need for its documentation. You should aim for
+maximum information density and to use the least amount of characters possible
+while meeting the documentation requirements below.
 
 If the XML representation of a directory has no content, or is empty, or has no
-information for you to document, then you may ignore the line count requirement
-and simply note that it is empty.
+information for you to document, then you may ignore the character count
+requirement and simply note that it is empty.
 
 #### Documentation Structure
 
-**1. Module Overview & Architecture (20%-25% of total line count)**
+**1. Module Overview & Architecture (20%-25% of total character count)**
 
 ```markdown
 ## Business Purpose & System Role
@@ -124,7 +125,7 @@ and simply note that it is empty.
 [Key exports, interfaces, and entry points with usage patterns]
 ```
 
-**2. Core Implementation Analysis (40%-50% of total line count)**
+**2. Core Implementation Analysis (40%-50% of total character count)**
 
 ```markdown
 ## Primary Components
@@ -144,7 +145,7 @@ and simply note that it is empty.
 [How this module connects to others, API contracts, event patterns]
 ```
 
-**3. LLM Implementation Guidance (20%-25% of total line count)**
+**3. LLM Implementation Guidance (20%-25% of total character count)**
 
 ```markdown
 ## Non-Obvious Patterns
@@ -164,7 +165,7 @@ and simply note that it is empty.
 [Test patterns, common failure modes, debugging strategies]
 ```
 
-**4. Code Examples & Patterns (15%-20% of total line count)**
+**4. Code Examples & Patterns (15%-20% of total character count)**
 
 ```markdown
 ## Key Implementation Examples

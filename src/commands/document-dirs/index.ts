@@ -6,6 +6,9 @@ import { createCommandModule, replaceVariables } from '@/core/command-utils';
 import { resolveSettings } from '@/core/config/resolver';
 import { OUTPUT_FILE_NAMES } from '@/core/constants';
 import { CommandHandlerArgs } from '@/core/types';
+import { updateDirDocHash } from '@/core/utils/doc-metadata';
+import { anyDocumentationFilesModifiedInDirs } from '@/core/utils/file-tracker';
+import { getCurrentCommitHash } from '@/core/utils/git';
 import { executeRepomix } from '@/core/utils/repomix';
 import {
   generateTempXmlPath,
@@ -30,6 +33,14 @@ const customDocumentDirsHandler = async (
   const validatedArgs = documentDirsArgsSchema.parse(args);
 
   try {
+    // Get current commit hash for tracking
+    const commitHash = getCurrentCommitHash();
+    if (!commitHash) {
+      console.warn(
+        '⚠️  Warning: Not in a git repository, commit hash tracking disabled'
+      );
+    }
+
     // Parse directory paths from CLI input string
     const directoryPaths = validatedArgs.directoryPaths
       .split(/\s+/)
@@ -113,6 +124,9 @@ const customDocumentDirsHandler = async (
     // Replace variables with provided arguments using imported function
     const processedContent = replaceVariables(proomptContent, enhancedArgs);
 
+    // Record start time for file modification tracking
+    const startTime = new Date();
+
     // Launch interactive CLI with initial prompt
     console.log(`🤖 Launching ${llmCli} for directory analysis...`);
     let child;
@@ -131,6 +145,35 @@ const customDocumentDirsHandler = async (
     return new Promise((resolve, reject) => {
       child.on('close', (code) => {
         if (code === 0) {
+          // Check if documentation files were actually modified in the documented directories
+          const filesModified = anyDocumentationFilesModifiedInDirs(
+            startTime,
+            outputFileNames,
+            directoryPaths
+          );
+
+          // Update metadata for each directory if files were modified and we have a commit hash
+          if (filesModified && commitHash) {
+            try {
+              for (const dirPath of directoryPaths) {
+                updateDirDocHash(dirPath, commitHash);
+              }
+              const shortHash = commitHash.substring(0, 7);
+              console.log(
+                `📝 Updated directory documentation metadata for ${directoryPaths.length} director${directoryPaths.length === 1 ? 'y' : 'ies'} with commit ${shortHash}`
+              );
+            } catch (error) {
+              console.warn(
+                '⚠️  Warning: Failed to update documentation metadata:',
+                (error as Error).message
+              );
+            }
+          } else if (filesModified && !commitHash) {
+            console.log(
+              '📝 Documentation files were modified but no commit hash available for tracking'
+            );
+          }
+
           resolve();
         } else {
           reject(new Error(`${llmCli} command failed with exit code ${code}`));
