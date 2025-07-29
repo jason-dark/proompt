@@ -446,6 +446,52 @@ solve your actual problem.
 **With Proompt**: AI becomes a reliable implementation partner that builds
 exactly what you need.
 
+## Documentation Tracking
+
+Proompt automatically tracks when `CLAUDE.md`/`GEMINI.md` documentation files
+are generated to help you keep them up-to-date as your codebase evolves.
+
+### How It Works
+
+When you run `document-project` or `document-dirs` commands and documentation
+files are created or modified, Proompt records:
+
+- The git commit hash when documentation was last generated
+- A timestamp of when the documentation was created
+- Which directories have been documented (for `document-dirs`)
+
+This information is stored in `.proompt/doc-metadata.json` in your project root.
+
+### Example Metadata File
+
+```json
+{
+  "project": {
+    "commitHash": "abc123456789...",
+    "timestamp": "2025-07-29T08:36:30.588Z"
+  },
+  "directories": {
+    "src/components": {
+      "commitHash": "def456789012...",
+      "timestamp": "2025-07-29T09:15:42.123Z"
+    },
+    "src/utils": {
+      "commitHash": "ghi789012345...",
+      "timestamp": "2025-07-29T10:22:15.456Z"
+    }
+  }
+}
+```
+
+### Purpose
+
+This metadata will enable upcoming features in Proompt:
+
+- Identifying documentation that may be outdated based on recent commits
+- Generating diffs between the current codebase and when documentation was last
+  updated
+- Providing warnings when documentation is significantly behind the current code
+
 ## Contributing
 
 Contributions are welcome. Pull requests will be reviewed and merged when they
