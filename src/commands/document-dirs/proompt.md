@@ -89,9 +89,22 @@ Identify and document:
 {{outputAction}} **platform-tailored documentation** {{outputFiles}} in each
 module's root directory.
 
-#### Documentation Structure (500 lines maximum per file)
+#### Documentation length
 
-**1. Module Overview & Architecture (100-125 lines)**
+- The maximum number of lines you may write per output file is **500**.
+- The minimum number of lines you may write per output file is **100**.
+
+The size and complexity of the directory will determine how many lines you need.
+You should aim for maximum information density and not purposely seek to inflate
+the line count, but you should use the maximum line count of 500 if you need to.
+
+If the XML representation of a directory has no content, or is empty, or has no
+information for you to document, then you may ignore the line count requirement
+and simply note that it is empty.
+
+#### Documentation Structure
+
+**1. Module Overview & Architecture (20%-25% of total line count)**
 
 ```markdown
 ## Business Purpose & System Role
@@ -111,7 +124,7 @@ module's root directory.
 [Key exports, interfaces, and entry points with usage patterns]
 ```
 
-**2. Core Implementation Analysis (200-250 lines)**
+**2. Core Implementation Analysis (40%-50% of total line count)**
 
 ```markdown
 ## Primary Components
@@ -131,7 +144,7 @@ module's root directory.
 [How this module connects to others, API contracts, event patterns]
 ```
 
-**3. LLM Implementation Guidance (100-125 lines)**
+**3. LLM Implementation Guidance (20%-25% of total line count)**
 
 ```markdown
 ## Non-Obvious Patterns
@@ -151,7 +164,7 @@ module's root directory.
 [Test patterns, common failure modes, debugging strategies]
 ```
 
-**4. Code Examples & Patterns (75-100 lines)**
+**4. Code Examples & Patterns (15%-20% of total line count)**
 
 ```markdown
 ## Key Implementation Examples
